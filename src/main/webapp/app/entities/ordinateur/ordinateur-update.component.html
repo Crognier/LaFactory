@@ -1,0 +1,59 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-ordinateur-heading">Create or edit a Ordinateur</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!ordinateur.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="ordinateur.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_code">Code</label>
+                    <input type="number" class="form-control" name="code" id="field_code"
+                        [(ngModel)]="ordinateur.code" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_coutParJour">Cout Par Jour</label>
+                    <input type="number" class="form-control" name="coutParJour" id="field_coutParJour"
+                        [(ngModel)]="ordinateur.coutParJour" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_processeur">Processeur</label>
+                    <input type="text" class="form-control" name="processeur" id="field_processeur"
+                        [(ngModel)]="ordinateur.processeur" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_ram">Ram</label>
+                    <input type="number" class="form-control" name="ram" id="field_ram"
+                        [(ngModel)]="ordinateur.ram" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_hdd">Hdd</label>
+                    <input type="number" class="form-control" name="hdd" id="field_hdd"
+                        [(ngModel)]="ordinateur.hdd" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_achat">Achat</label>
+                    <div class="input-group">
+                        <input id="field_achat" type="text" class="form-control" name="achat" ngbDatepicker  #achatDp="ngbDatepicker" [(ngModel)]="ordinateur.achat"
+                        />
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="achatDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

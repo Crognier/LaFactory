@@ -1,0 +1,30 @@
+{
+    "name": "VideoProjecteur",
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "coutParJour",
+            "fieldType": "Double"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "module",
+            "otherEntityName": "module",
+            "otherEntityRelationshipName": "videoProjecteur"
+        }
+    ],
+    "changelogDate": "20181204142426",
+    "entityTableName": "video_projecteur",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

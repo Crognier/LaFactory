@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity Module.
+    -->
+    <changeSet id="20181204142432-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="salle_id"
+                                 baseTableName="module"
+                                 constraintName="fk_module_salle_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="salle"/>
+
+        <addForeignKeyConstraint baseColumnNames="video_projecteur_id"
+                                 baseTableName="module"
+                                 constraintName="fk_module_video_projecteur_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="video_projecteur"/>
+
+        <addForeignKeyConstraint baseColumnNames="cursus_id"
+                                 baseTableName="module"
+                                 constraintName="fk_module_cursus_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="cursus"/>
+
+        <addForeignKeyConstraint baseColumnNames="formateur_id"
+                                 baseTableName="module"
+                                 constraintName="fk_module_formateur_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="formateur"/>
+
+        <addForeignKeyConstraint baseColumnNames="matiere_id"
+                                 baseTableName="module"
+                                 constraintName="fk_module_matiere_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="matiere"/>
+
+    </changeSet>
+</databaseChangeLog>

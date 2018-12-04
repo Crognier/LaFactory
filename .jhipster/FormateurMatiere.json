@@ -1,0 +1,33 @@
+{
+    "name": "FormateurMatiere",
+    "fields": [
+        {
+            "fieldName": "niveau",
+            "fieldType": "Niveau",
+            "fieldValues": "DEBUTANT,INTERMEDIAIRE,AVANCE,EXPERT"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "formateur",
+            "otherEntityName": "formateur",
+            "otherEntityField": "nom"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "matiere",
+            "otherEntityName": "matiere",
+            "otherEntityField": "titre"
+        }
+    ],
+    "changelogDate": "20181204142435",
+    "entityTableName": "formateur_matiere",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

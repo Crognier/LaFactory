@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-module-heading">Create or edit a Module</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!module.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="module.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_dateDebut">Date Debut</label>
+                    <div class="input-group">
+                        <input id="field_dateDebut" type="text" class="form-control" name="dateDebut" ngbDatepicker  #dateDebutDp="ngbDatepicker" [(ngModel)]="module.dateDebut"
+                        />
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dateDebutDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_duree">Duree</label>
+                    <input type="number" class="form-control" name="duree" id="field_duree"
+                        [(ngModel)]="module.duree" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_salle">Salle</label>
+                    <select class="form-control" id="field_salle" name="salle" [(ngModel)]="module.salle" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="salleOption.id === module.salle?.id ? module.salle : salleOption" *ngFor="let salleOption of salles; trackBy: trackSalleById">{{salleOption.code}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_videoProjecteur">Video Projecteur</label>
+                    <select class="form-control" id="field_videoProjecteur" name="videoProjecteur" [(ngModel)]="module.videoProjecteur" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="videoProjecteurOption.id === module.videoProjecteur?.id ? module.videoProjecteur : videoProjecteurOption" *ngFor="let videoProjecteurOption of videoprojecteurs; trackBy: trackVideoProjecteurById">{{videoProjecteurOption.code}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_cursus">Cursus</label>
+                    <select class="form-control" id="field_cursus" name="cursus" [(ngModel)]="module.cursus" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="cursusOption.id === module.cursus?.id ? module.cursus : cursusOption" *ngFor="let cursusOption of cursuses; trackBy: trackCursusById">{{cursusOption.dateDebut}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_formateur">Formateur</label>
+                    <select class="form-control" id="field_formateur" name="formateur" [(ngModel)]="module.formateur" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="formateurOption.id === module.formateur?.id ? module.formateur : formateurOption" *ngFor="let formateurOption of formateurs; trackBy: trackFormateurById">{{formateurOption.nom}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_matiere">Matiere</label>
+                    <select class="form-control" id="field_matiere" name="matiere" [(ngModel)]="module.matiere" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="matiereOption.id === module.matiere?.id ? module.matiere : matiereOption" *ngFor="let matiereOption of matieres; trackBy: trackMatiereById">{{matiereOption.titre}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

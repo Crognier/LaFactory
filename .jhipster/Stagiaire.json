@@ -1,0 +1,65 @@
+{
+    "name": "Stagiaire",
+    "fields": [
+        {
+            "fieldName": "nom",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "prenom",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "numero",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "rue",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "codePostal",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ville",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "numeroTelephone",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "eMail",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "niveau",
+            "fieldType": "Niveau",
+            "fieldValues": "DEBUTANT,INTERMEDIAIRE,AVANCE,EXPERT"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "ordinateur",
+            "otherEntityName": "ordinateur",
+            "otherEntityField": "code"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "cursus",
+            "otherEntityName": "cursus",
+            "otherEntityField": "dateDebut"
+        }
+    ],
+    "changelogDate": "20181204142428",
+    "entityTableName": "stagiaire",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

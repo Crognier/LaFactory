@@ -1,0 +1,44 @@
+{
+    "name": "Matiere",
+    "fields": [
+        {
+            "fieldName": "titre",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "objectifs",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "prerequis",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "contenu",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "formateurMatiere",
+            "otherEntityName": "formateurMatiere",
+            "otherEntityRelationshipName": "matiere"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "module",
+            "otherEntityName": "module",
+            "otherEntityRelationshipName": "matiere"
+        }
+    ],
+    "changelogDate": "20181204142434",
+    "entityTableName": "matiere",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

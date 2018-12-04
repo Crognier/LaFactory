@@ -1,0 +1,71 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="stagiaire">
+            <h2><span>Stagiaire</span> {{stagiaire.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Nom</span></dt>
+                <dd>
+                    <span>{{stagiaire.nom}}</span>
+                </dd>
+                <dt><span>Prenom</span></dt>
+                <dd>
+                    <span>{{stagiaire.prenom}}</span>
+                </dd>
+                <dt><span>Numero</span></dt>
+                <dd>
+                    <span>{{stagiaire.numero}}</span>
+                </dd>
+                <dt><span>Rue</span></dt>
+                <dd>
+                    <span>{{stagiaire.rue}}</span>
+                </dd>
+                <dt><span>Code Postal</span></dt>
+                <dd>
+                    <span>{{stagiaire.codePostal}}</span>
+                </dd>
+                <dt><span>Ville</span></dt>
+                <dd>
+                    <span>{{stagiaire.ville}}</span>
+                </dd>
+                <dt><span>Numero Telephone</span></dt>
+                <dd>
+                    <span>{{stagiaire.numeroTelephone}}</span>
+                </dd>
+                <dt><span>E Mail</span></dt>
+                <dd>
+                    <span>{{stagiaire.eMail}}</span>
+                </dd>
+                <dt><span>Niveau</span></dt>
+                <dd>
+                    <span>{{stagiaire.niveau}}</span>
+                </dd>
+                <dt><span>Ordinateur</span></dt>
+                <dd>
+                    <div *ngIf="stagiaire.ordinateur">
+                        <a [routerLink]="['/ordinateur', stagiaire.ordinateur?.id, 'view']">{{stagiaire.ordinateur?.code}}</a>
+                    </div>
+                </dd>
+                <dt><span>Cursus</span></dt>
+                <dd>
+                    <div *ngIf="stagiaire.cursus">
+                        <a [routerLink]="['/cursus', stagiaire.cursus?.id, 'view']">{{stagiaire.cursus?.dateDebut}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/stagiaire', stagiaire.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

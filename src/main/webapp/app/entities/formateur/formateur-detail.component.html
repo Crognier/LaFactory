@@ -1,0 +1,55 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="formateur">
+            <h2><span>Formateur</span> {{formateur.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Nom</span></dt>
+                <dd>
+                    <span>{{formateur.nom}}</span>
+                </dd>
+                <dt><span>Prenom</span></dt>
+                <dd>
+                    <span>{{formateur.prenom}}</span>
+                </dd>
+                <dt><span>Numero</span></dt>
+                <dd>
+                    <span>{{formateur.numero}}</span>
+                </dd>
+                <dt><span>Rue</span></dt>
+                <dd>
+                    <span>{{formateur.rue}}</span>
+                </dd>
+                <dt><span>Code Postal</span></dt>
+                <dd>
+                    <span>{{formateur.codePostal}}</span>
+                </dd>
+                <dt><span>Ville</span></dt>
+                <dd>
+                    <span>{{formateur.ville}}</span>
+                </dd>
+                <dt><span>Numero Telephone</span></dt>
+                <dd>
+                    <span>{{formateur.numeroTelephone}}</span>
+                </dd>
+                <dt><span>E Mail</span></dt>
+                <dd>
+                    <span>{{formateur.eMail}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/formateur', formateur.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

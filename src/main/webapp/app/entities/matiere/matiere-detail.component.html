@@ -1,0 +1,39 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="matiere">
+            <h2><span>Matiere</span> {{matiere.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Titre</span></dt>
+                <dd>
+                    <span>{{matiere.titre}}</span>
+                </dd>
+                <dt><span>Objectifs</span></dt>
+                <dd>
+                    <span>{{matiere.objectifs}}</span>
+                </dd>
+                <dt><span>Prerequis</span></dt>
+                <dd>
+                    <span>{{matiere.prerequis}}</span>
+                </dd>
+                <dt><span>Contenu</span></dt>
+                <dd>
+                    <span>{{matiere.contenu}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/matiere', matiere.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

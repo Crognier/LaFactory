@@ -1,0 +1,30 @@
+{
+    "name": "Indisponibilite",
+    "fields": [
+        {
+            "fieldName": "dateDebut",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "duree",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "formateur",
+            "otherEntityName": "formateur",
+            "otherEntityField": "nom"
+        }
+    ],
+    "changelogDate": "20181204142436",
+    "entityTableName": "indisponibilite",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,46 @@
+{
+    "name": "Ordinateur",
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "coutParJour",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "processeur",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "ram",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "hdd",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "achat",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "stagiaire",
+            "otherEntityName": "stagiaire",
+            "otherEntityRelationshipName": "ordinateur"
+        }
+    ],
+    "changelogDate": "20181204142425",
+    "entityTableName": "ordinateur",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

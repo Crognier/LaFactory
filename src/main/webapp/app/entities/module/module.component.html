@@ -1,0 +1,86 @@
+<div>
+    <h2 id="page-heading">
+        <span>Modules</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-module" [routerLink]="['/module/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create new Module
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="modules">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Date Debut</span></th>
+            <th><span>Duree</span></th>
+            <th><span>Salle</span></th>
+            <th><span>Video Projecteur</span></th>
+            <th><span>Cursus</span></th>
+            <th><span>Formateur</span></th>
+            <th><span>Matiere</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let module of modules ;trackBy: trackId">
+                <td><a [routerLink]="['/module', module.id, 'view' ]">{{module.id}}</a></td>
+                <td>{{module.dateDebut | date:'mediumDate'}}</td>
+                <td>{{module.duree}}</td>
+                <td>
+                    <div *ngIf="module.salle">
+                        <a [routerLink]="['../salle', module.salle?.id, 'view' ]" >{{module.salle?.code}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="module.videoProjecteur">
+                        <a [routerLink]="['../video-projecteur', module.videoProjecteur?.id, 'view' ]" >{{module.videoProjecteur?.code}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="module.cursus">
+                        <a [routerLink]="['../cursus', module.cursus?.id, 'view' ]" >{{module.cursus?.dateDebut}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="module.formateur">
+                        <a [routerLink]="['../formateur', module.formateur?.id, 'view' ]" >{{module.formateur?.nom}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="module.matiere">
+                        <a [routerLink]="['../matiere', module.matiere?.id, 'view' ]" >{{module.matiere?.titre}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/module', module.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/module', module.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'module/'+ module.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

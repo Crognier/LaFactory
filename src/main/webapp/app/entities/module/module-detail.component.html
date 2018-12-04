@@ -1,0 +1,61 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="module">
+            <h2><span>Module</span> {{module.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Date Debut</span></dt>
+                <dd>
+                    <span>{{module.dateDebut}}</span>
+                </dd>
+                <dt><span>Duree</span></dt>
+                <dd>
+                    <span>{{module.duree}}</span>
+                </dd>
+                <dt><span>Salle</span></dt>
+                <dd>
+                    <div *ngIf="module.salle">
+                        <a [routerLink]="['/salle', module.salle?.id, 'view']">{{module.salle?.code}}</a>
+                    </div>
+                </dd>
+                <dt><span>Video Projecteur</span></dt>
+                <dd>
+                    <div *ngIf="module.videoProjecteur">
+                        <a [routerLink]="['/video-projecteur', module.videoProjecteur?.id, 'view']">{{module.videoProjecteur?.code}}</a>
+                    </div>
+                </dd>
+                <dt><span>Cursus</span></dt>
+                <dd>
+                    <div *ngIf="module.cursus">
+                        <a [routerLink]="['/cursus', module.cursus?.id, 'view']">{{module.cursus?.dateDebut}}</a>
+                    </div>
+                </dd>
+                <dt><span>Formateur</span></dt>
+                <dd>
+                    <div *ngIf="module.formateur">
+                        <a [routerLink]="['/formateur', module.formateur?.id, 'view']">{{module.formateur?.nom}}</a>
+                    </div>
+                </dd>
+                <dt><span>Matiere</span></dt>
+                <dd>
+                    <div *ngIf="module.matiere">
+                        <a [routerLink]="['/matiere', module.matiere?.id, 'view']">{{module.matiere?.titre}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/module', module.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

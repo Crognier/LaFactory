@@ -1,0 +1,34 @@
+{
+    "name": "Salle",
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "coutParJour",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "capacite",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "module",
+            "otherEntityName": "module",
+            "otherEntityRelationshipName": "salle"
+        }
+    ],
+    "changelogDate": "20181204142427",
+    "entityTableName": "salle",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

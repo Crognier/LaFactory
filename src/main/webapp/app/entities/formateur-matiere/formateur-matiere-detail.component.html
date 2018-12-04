@@ -1,0 +1,39 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="formateurMatiere">
+            <h2><span>Formateur Matiere</span> {{formateurMatiere.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Niveau</span></dt>
+                <dd>
+                    <span>{{formateurMatiere.niveau}}</span>
+                </dd>
+                <dt><span>Formateur</span></dt>
+                <dd>
+                    <div *ngIf="formateurMatiere.formateur">
+                        <a [routerLink]="['/formateur', formateurMatiere.formateur?.id, 'view']">{{formateurMatiere.formateur?.nom}}</a>
+                    </div>
+                </dd>
+                <dt><span>Matiere</span></dt>
+                <dd>
+                    <div *ngIf="formateurMatiere.matiere">
+                        <a [routerLink]="['/matiere', formateurMatiere.matiere?.id, 'view']">{{formateurMatiere.matiere?.titre}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/formateur-matiere', formateurMatiere.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

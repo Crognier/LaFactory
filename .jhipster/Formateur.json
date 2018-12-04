@@ -1,0 +1,66 @@
+{
+    "name": "Formateur",
+    "fields": [
+        {
+            "fieldName": "nom",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "prenom",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "numero",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "rue",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "codePostal",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ville",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "numeroTelephone",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "eMail",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "formateurMatiere",
+            "otherEntityName": "formateurMatiere",
+            "otherEntityRelationshipName": "formateur"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "module",
+            "otherEntityName": "module",
+            "otherEntityRelationshipName": "formateur"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "indisponibilite",
+            "otherEntityName": "indisponibilite",
+            "otherEntityRelationshipName": "formateur"
+        }
+    ],
+    "changelogDate": "20181204142431",
+    "entityTableName": "formateur",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

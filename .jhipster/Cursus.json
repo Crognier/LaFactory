@@ -1,0 +1,42 @@
+{
+    "name": "Cursus",
+    "fields": [
+        {
+            "fieldName": "dateDebut",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "duree",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "stagiaire",
+            "otherEntityName": "stagiaire",
+            "otherEntityRelationshipName": "cursus"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "module",
+            "otherEntityName": "module",
+            "otherEntityRelationshipName": "cursus"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "gestionnaire",
+            "otherEntityName": "gestionnaire",
+            "otherEntityField": "nom"
+        }
+    ],
+    "changelogDate": "20181204142433",
+    "entityTableName": "cursus",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

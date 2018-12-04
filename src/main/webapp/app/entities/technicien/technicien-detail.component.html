@@ -1,0 +1,55 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="technicien">
+            <h2><span>Technicien</span> {{technicien.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Nom</span></dt>
+                <dd>
+                    <span>{{technicien.nom}}</span>
+                </dd>
+                <dt><span>Prenom</span></dt>
+                <dd>
+                    <span>{{technicien.prenom}}</span>
+                </dd>
+                <dt><span>Numero</span></dt>
+                <dd>
+                    <span>{{technicien.numero}}</span>
+                </dd>
+                <dt><span>Rue</span></dt>
+                <dd>
+                    <span>{{technicien.rue}}</span>
+                </dd>
+                <dt><span>Code Postal</span></dt>
+                <dd>
+                    <span>{{technicien.codePostal}}</span>
+                </dd>
+                <dt><span>Ville</span></dt>
+                <dd>
+                    <span>{{technicien.ville}}</span>
+                </dd>
+                <dt><span>Numero Telephone</span></dt>
+                <dd>
+                    <span>{{technicien.numeroTelephone}}</span>
+                </dd>
+                <dt><span>E Mail</span></dt>
+                <dd>
+                    <span>{{technicien.eMail}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/technicien', technicien.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

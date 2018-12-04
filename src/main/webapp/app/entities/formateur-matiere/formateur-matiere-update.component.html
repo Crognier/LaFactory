@@ -1,0 +1,47 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-formateur-matiere-heading">Create or edit a Formateur Matiere</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!formateurMatiere.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="formateurMatiere.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_niveau">Niveau</label>
+                    <select class="form-control" name="niveau" [(ngModel)]="formateurMatiere.niveau" id="field_niveau" >
+                        <option value="DEBUTANT">DEBUTANT</option>
+                        <option value="INTERMEDIAIRE">INTERMEDIAIRE</option>
+                        <option value="AVANCE">AVANCE</option>
+                        <option value="EXPERT">EXPERT</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_formateur">Formateur</label>
+                    <select class="form-control" id="field_formateur" name="formateur" [(ngModel)]="formateurMatiere.formateur" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="formateurOption.id === formateurMatiere.formateur?.id ? formateurMatiere.formateur : formateurOption" *ngFor="let formateurOption of formateurs; trackBy: trackFormateurById">{{formateurOption.nom}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_matiere">Matiere</label>
+                    <select class="form-control" id="field_matiere" name="matiere" [(ngModel)]="formateurMatiere.matiere" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="matiereOption.id === formateurMatiere.matiere?.id ? formateurMatiere.matiere : matiereOption" *ngFor="let matiereOption of matieres; trackBy: trackMatiereById">{{matiereOption.titre}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,137 @@
+entity Ordinateur {
+	code Integer
+    coutParJour Double
+    processeur String
+    ram Integer
+    hdd Integer
+    achat LocalDate
+}
+
+entity VideoProjecteur {
+	code Integer
+    coutParJour Double
+}
+
+entity Salle {
+	code Integer
+    coutParJour Double
+    capacite Integer
+    
+}
+
+entity Stagiaire{
+nom String
+prenom String
+numero Integer
+rue String
+codePostal Integer
+ville String
+numeroTelephone Integer
+eMail String
+niveau Niveau
+}
+
+entity Gestionnaire{
+nom String
+prenom String
+numero Integer
+rue String
+codePostal Integer
+ville String
+numeroTelephone Integer
+eMail String
+}
+
+entity Technicien{
+nom String
+prenom String
+numero Integer
+rue String
+codePostal Integer
+ville String
+numeroTelephone Integer
+eMail String
+}
+
+entity Formateur{
+nom String
+prenom String
+numero Integer
+rue String
+codePostal Integer
+ville String
+numeroTelephone Integer
+eMail String
+}
+
+
+entity Module{
+dateDebut LocalDate
+duree Integer
+}
+
+entity Cursus{
+dateDebut LocalDate
+duree Integer
+}
+
+entity Matiere{
+titre String
+objectifs String
+prerequis String
+contenu String
+}
+
+entity FormateurMatiere{
+niveau Niveau
+}
+
+entity Indisponibilite{
+dateDebut LocalDate
+duree Integer
+}
+
+enum Niveau { 
+    DEBUTANT, INTERMEDIAIRE, AVANCE, EXPERT
+}
+
+relationship OneToMany {
+	 Ordinateur{stagiaire(nom)} to Stagiaire{ordinateur(code)}
+}
+
+relationship OneToMany {
+	Salle{module(dateDebut)} to Module{salle(code)}
+}
+relationship OneToMany {
+	VideoProjecteur{module(dateDebut)} to Module{videoProjecteur(code)}
+}
+
+relationship OneToMany {
+	Cursus{stagiaire(nom)} to Stagiaire{cursus(dateDebut)}
+}
+
+relationship OneToMany {
+	Gestionnaire{cursus(dateDebut)} to Cursus{gestionnaire(nom)}
+}
+relationship OneToMany {
+	Formateur{formateurMatiere} to FormateurMatiere{formateur(nom)}
+}
+relationship OneToMany {
+	Matiere{formateurMatiere} to FormateurMatiere{matiere(titre)}
+}
+relationship OneToMany {
+	Cursus{module(dateDebut)} to Module{cursus(dateDebut)}
+}
+relationship OneToMany {
+	 Formateur{module(dateDebut)} to Module{formateur(nom)}
+}
+
+relationship OneToMany {
+	 Matiere{module(dateDebut)} to Module{matiere(titre)}
+}
+relationship ManyToOne {
+	 Indisponibilite{formateur(nom)} to Formateur{indisponibilite(dateDebut)}
+}
+
+
+

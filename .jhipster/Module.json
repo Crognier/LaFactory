@@ -1,0 +1,54 @@
+{
+    "name": "Module",
+    "fields": [
+        {
+            "fieldName": "dateDebut",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "duree",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "salle",
+            "otherEntityName": "salle",
+            "otherEntityField": "code"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "videoProjecteur",
+            "otherEntityName": "videoProjecteur",
+            "otherEntityField": "code"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "cursus",
+            "otherEntityName": "cursus",
+            "otherEntityField": "dateDebut"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "formateur",
+            "otherEntityName": "formateur",
+            "otherEntityField": "nom"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "matiere",
+            "otherEntityName": "matiere",
+            "otherEntityField": "titre"
+        }
+    ],
+    "changelogDate": "20181204142432",
+    "entityTableName": "module",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}
