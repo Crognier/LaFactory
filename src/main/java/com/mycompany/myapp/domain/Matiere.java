@@ -41,7 +41,7 @@ public class Matiere implements Serializable {
     @OneToMany(mappedBy = "matiere", cascade = CascadeType.REMOVE)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<FormateurMatiere> formateurMatieres = new HashSet<>();
-    @OneToMany(mappedBy = "matiere", cascade= {CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "matiere")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Module> modules = new HashSet<>();
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
