@@ -1,10 +1,21 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.LaFactoryApp;
+import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.mycompany.myapp.domain.Ordinateur;
-import com.mycompany.myapp.repository.OrdinateurRepository;
-import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,17 +31,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.List;
-
-
-import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.mycompany.myapp.LaFactoryApp;
+import com.mycompany.myapp.domain.Ordinateur;
+import com.mycompany.myapp.service.OrdinateurService;
+import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 /**
  * Test class for the OrdinateurResource REST controller.
@@ -60,7 +64,7 @@ public class OrdinateurResourceIntTest {
     private static final LocalDate UPDATED_ACHAT = LocalDate.now(ZoneId.systemDefault());
 
     @Autowired
-    private OrdinateurRepository ordinateurRepository;
+    private OrdinateurService ordinateurService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -81,7 +85,7 @@ public class OrdinateurResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final OrdinateurResource ordinateurResource = new OrdinateurResource(ordinateurRepository);
+        final OrdinateurResource ordinateurResource = new OrdinateurResource(ordinateurService);
         this.restOrdinateurMockMvc = MockMvcBuilders.standaloneSetup(ordinateurResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -114,7 +118,7 @@ public class OrdinateurResourceIntTest {
     @Test
     @Transactional
     public void createOrdinateur() throws Exception {
-        int databaseSizeBeforeCreate = ordinateurRepository.findAll().size();
+        int databaseSizeBeforeCreate = ordinateurService.findAll().size();
 
         // Create the Ordinateur
         restOrdinateurMockMvc.perform(post("/api/ordinateurs")
@@ -123,7 +127,7 @@ public class OrdinateurResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the Ordinateur in the database
-        List<Ordinateur> ordinateurList = ordinateurRepository.findAll();
+        List<Ordinateur> ordinateurList = ordinateurService.findAll();
         assertThat(ordinateurList).hasSize(databaseSizeBeforeCreate + 1);
         Ordinateur testOrdinateur = ordinateurList.get(ordinateurList.size() - 1);
         assertThat(testOrdinateur.getCode()).isEqualTo(DEFAULT_CODE);
@@ -137,7 +141,7 @@ public class OrdinateurResourceIntTest {
     @Test
     @Transactional
     public void createOrdinateurWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = ordinateurRepository.findAll().size();
+        int databaseSizeBeforeCreate = ordinateurService.findAll().size();
 
         // Create the Ordinateur with an existing ID
         ordinateur.setId(1L);
@@ -149,7 +153,7 @@ public class OrdinateurResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Ordinateur in the database
-        List<Ordinateur> ordinateurList = ordinateurRepository.findAll();
+        List<Ordinateur> ordinateurList = ordinateurService.findAll();
         assertThat(ordinateurList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -157,7 +161,7 @@ public class OrdinateurResourceIntTest {
     @Transactional
     public void getAllOrdinateurs() throws Exception {
         // Initialize the database
-        ordinateurRepository.saveAndFlush(ordinateur);
+        ordinateurService.saveAndFlush(ordinateur);
 
         // Get all the ordinateurList
         restOrdinateurMockMvc.perform(get("/api/ordinateurs?sort=id,desc"))
@@ -176,7 +180,7 @@ public class OrdinateurResourceIntTest {
     @Transactional
     public void getOrdinateur() throws Exception {
         // Initialize the database
-        ordinateurRepository.saveAndFlush(ordinateur);
+        ordinateurService.saveAndFlush(ordinateur);
 
         // Get the ordinateur
         restOrdinateurMockMvc.perform(get("/api/ordinateurs/{id}", ordinateur.getId()))
@@ -203,12 +207,12 @@ public class OrdinateurResourceIntTest {
     @Transactional
     public void updateOrdinateur() throws Exception {
         // Initialize the database
-        ordinateurRepository.saveAndFlush(ordinateur);
+        ordinateurService.saveAndFlush(ordinateur);
 
-        int databaseSizeBeforeUpdate = ordinateurRepository.findAll().size();
+        int databaseSizeBeforeUpdate = ordinateurService.findAll().size();
 
         // Update the ordinateur
-        Ordinateur updatedOrdinateur = ordinateurRepository.findById(ordinateur.getId()).get();
+        Ordinateur updatedOrdinateur = ordinateurService.findById(ordinateur.getId()).get();
         // Disconnect from session so that the updates on updatedOrdinateur are not directly saved in db
         em.detach(updatedOrdinateur);
         updatedOrdinateur
@@ -225,7 +229,7 @@ public class OrdinateurResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the Ordinateur in the database
-        List<Ordinateur> ordinateurList = ordinateurRepository.findAll();
+        List<Ordinateur> ordinateurList = ordinateurService.findAll();
         assertThat(ordinateurList).hasSize(databaseSizeBeforeUpdate);
         Ordinateur testOrdinateur = ordinateurList.get(ordinateurList.size() - 1);
         assertThat(testOrdinateur.getCode()).isEqualTo(UPDATED_CODE);
@@ -239,7 +243,7 @@ public class OrdinateurResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingOrdinateur() throws Exception {
-        int databaseSizeBeforeUpdate = ordinateurRepository.findAll().size();
+        int databaseSizeBeforeUpdate = ordinateurService.findAll().size();
 
         // Create the Ordinateur
 
@@ -250,7 +254,7 @@ public class OrdinateurResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Ordinateur in the database
-        List<Ordinateur> ordinateurList = ordinateurRepository.findAll();
+        List<Ordinateur> ordinateurList = ordinateurService.findAll();
         assertThat(ordinateurList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -258,9 +262,9 @@ public class OrdinateurResourceIntTest {
     @Transactional
     public void deleteOrdinateur() throws Exception {
         // Initialize the database
-        ordinateurRepository.saveAndFlush(ordinateur);
+        ordinateurService.saveAndFlush(ordinateur);
 
-        int databaseSizeBeforeDelete = ordinateurRepository.findAll().size();
+        int databaseSizeBeforeDelete = ordinateurService.findAll().size();
 
         // Get the ordinateur
         restOrdinateurMockMvc.perform(delete("/api/ordinateurs/{id}", ordinateur.getId())
@@ -268,7 +272,7 @@ public class OrdinateurResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Ordinateur> ordinateurList = ordinateurRepository.findAll();
+        List<Ordinateur> ordinateurList = ordinateurService.findAll();
         assertThat(ordinateurList).hasSize(databaseSizeBeforeDelete - 1);
     }
 

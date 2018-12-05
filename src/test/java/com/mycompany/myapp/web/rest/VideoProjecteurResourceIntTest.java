@@ -1,10 +1,19 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.LaFactoryApp;
+import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.mycompany.myapp.domain.VideoProjecteur;
-import com.mycompany.myapp.repository.VideoProjecteurRepository;
-import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,15 +29,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.List;
-
-
-import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.mycompany.myapp.LaFactoryApp;
+import com.mycompany.myapp.domain.VideoProjecteur;
+import com.mycompany.myapp.service.VideoProjecteurService;
+import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 /**
  * Test class for the VideoProjecteurResource REST controller.
@@ -46,7 +50,7 @@ public class VideoProjecteurResourceIntTest {
     private static final Double UPDATED_COUT_PAR_JOUR = 2D;
 
     @Autowired
-    private VideoProjecteurRepository videoProjecteurRepository;
+    private VideoProjecteurService videoProjecteurService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -67,7 +71,7 @@ public class VideoProjecteurResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final VideoProjecteurResource videoProjecteurResource = new VideoProjecteurResource(videoProjecteurRepository);
+        final VideoProjecteurResource videoProjecteurResource = new VideoProjecteurResource(videoProjecteurService);
         this.restVideoProjecteurMockMvc = MockMvcBuilders.standaloneSetup(videoProjecteurResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -96,7 +100,7 @@ public class VideoProjecteurResourceIntTest {
     @Test
     @Transactional
     public void createVideoProjecteur() throws Exception {
-        int databaseSizeBeforeCreate = videoProjecteurRepository.findAll().size();
+        int databaseSizeBeforeCreate = videoProjecteurService.findAll().size();
 
         // Create the VideoProjecteur
         restVideoProjecteurMockMvc.perform(post("/api/video-projecteurs")
@@ -105,7 +109,7 @@ public class VideoProjecteurResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the VideoProjecteur in the database
-        List<VideoProjecteur> videoProjecteurList = videoProjecteurRepository.findAll();
+        List<VideoProjecteur> videoProjecteurList = videoProjecteurService.findAll();
         assertThat(videoProjecteurList).hasSize(databaseSizeBeforeCreate + 1);
         VideoProjecteur testVideoProjecteur = videoProjecteurList.get(videoProjecteurList.size() - 1);
         assertThat(testVideoProjecteur.getCode()).isEqualTo(DEFAULT_CODE);
@@ -115,7 +119,7 @@ public class VideoProjecteurResourceIntTest {
     @Test
     @Transactional
     public void createVideoProjecteurWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = videoProjecteurRepository.findAll().size();
+        int databaseSizeBeforeCreate = videoProjecteurService.findAll().size();
 
         // Create the VideoProjecteur with an existing ID
         videoProjecteur.setId(1L);
@@ -127,7 +131,7 @@ public class VideoProjecteurResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the VideoProjecteur in the database
-        List<VideoProjecteur> videoProjecteurList = videoProjecteurRepository.findAll();
+        List<VideoProjecteur> videoProjecteurList = videoProjecteurService.findAll();
         assertThat(videoProjecteurList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -135,7 +139,7 @@ public class VideoProjecteurResourceIntTest {
     @Transactional
     public void getAllVideoProjecteurs() throws Exception {
         // Initialize the database
-        videoProjecteurRepository.saveAndFlush(videoProjecteur);
+        videoProjecteurService.saveAndFlush(videoProjecteur);
 
         // Get all the videoProjecteurList
         restVideoProjecteurMockMvc.perform(get("/api/video-projecteurs?sort=id,desc"))
@@ -150,7 +154,7 @@ public class VideoProjecteurResourceIntTest {
     @Transactional
     public void getVideoProjecteur() throws Exception {
         // Initialize the database
-        videoProjecteurRepository.saveAndFlush(videoProjecteur);
+        videoProjecteurService.saveAndFlush(videoProjecteur);
 
         // Get the videoProjecteur
         restVideoProjecteurMockMvc.perform(get("/api/video-projecteurs/{id}", videoProjecteur.getId()))
@@ -173,12 +177,12 @@ public class VideoProjecteurResourceIntTest {
     @Transactional
     public void updateVideoProjecteur() throws Exception {
         // Initialize the database
-        videoProjecteurRepository.saveAndFlush(videoProjecteur);
+        videoProjecteurService.saveAndFlush(videoProjecteur);
 
-        int databaseSizeBeforeUpdate = videoProjecteurRepository.findAll().size();
+        int databaseSizeBeforeUpdate = videoProjecteurService.findAll().size();
 
         // Update the videoProjecteur
-        VideoProjecteur updatedVideoProjecteur = videoProjecteurRepository.findById(videoProjecteur.getId()).get();
+        VideoProjecteur updatedVideoProjecteur = videoProjecteurService.findById(videoProjecteur.getId()).get();
         // Disconnect from session so that the updates on updatedVideoProjecteur are not directly saved in db
         em.detach(updatedVideoProjecteur);
         updatedVideoProjecteur
@@ -191,7 +195,7 @@ public class VideoProjecteurResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the VideoProjecteur in the database
-        List<VideoProjecteur> videoProjecteurList = videoProjecteurRepository.findAll();
+        List<VideoProjecteur> videoProjecteurList = videoProjecteurService.findAll();
         assertThat(videoProjecteurList).hasSize(databaseSizeBeforeUpdate);
         VideoProjecteur testVideoProjecteur = videoProjecteurList.get(videoProjecteurList.size() - 1);
         assertThat(testVideoProjecteur.getCode()).isEqualTo(UPDATED_CODE);
@@ -201,7 +205,7 @@ public class VideoProjecteurResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingVideoProjecteur() throws Exception {
-        int databaseSizeBeforeUpdate = videoProjecteurRepository.findAll().size();
+        int databaseSizeBeforeUpdate = videoProjecteurService.findAll().size();
 
         // Create the VideoProjecteur
 
@@ -212,7 +216,7 @@ public class VideoProjecteurResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the VideoProjecteur in the database
-        List<VideoProjecteur> videoProjecteurList = videoProjecteurRepository.findAll();
+        List<VideoProjecteur> videoProjecteurList = videoProjecteurService.findAll();
         assertThat(videoProjecteurList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -220,9 +224,9 @@ public class VideoProjecteurResourceIntTest {
     @Transactional
     public void deleteVideoProjecteur() throws Exception {
         // Initialize the database
-        videoProjecteurRepository.saveAndFlush(videoProjecteur);
+        videoProjecteurService.saveAndFlush(videoProjecteur);
 
-        int databaseSizeBeforeDelete = videoProjecteurRepository.findAll().size();
+        int databaseSizeBeforeDelete = videoProjecteurService.findAll().size();
 
         // Get the videoProjecteur
         restVideoProjecteurMockMvc.perform(delete("/api/video-projecteurs/{id}", videoProjecteur.getId())
@@ -230,7 +234,7 @@ public class VideoProjecteurResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<VideoProjecteur> videoProjecteurList = videoProjecteurRepository.findAll();
+        List<VideoProjecteur> videoProjecteurList = videoProjecteurService.findAll();
         assertThat(videoProjecteurList).hasSize(databaseSizeBeforeDelete - 1);
     }
 

@@ -21,6 +21,10 @@ public class CursusService {
 		return cursusRepository.save(cursus);
 	}
 	
+	public Cursus saveAndFlush(Cursus cursus) {
+		return cursusRepository.saveAndFlush(cursus);
+	}
+	
 	public List<Cursus> findAll() {
 		return cursusRepository.findAll();
 	}
