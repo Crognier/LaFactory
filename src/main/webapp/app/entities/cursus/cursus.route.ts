@@ -33,7 +33,7 @@ export const cursusRoute: Routes = [
         path: 'cursus',
         component: CursusComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Cursuses'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const cursusRoute: Routes = [
             cursus: CursusResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Cursuses'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const cursusRoute: Routes = [
             cursus: CursusResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Cursuses'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const cursusRoute: Routes = [
             cursus: CursusResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Cursuses'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const cursusPopupRoute: Routes = [
             cursus: CursusResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Cursuses'
         },
         canActivate: [UserRouteAccessService],
