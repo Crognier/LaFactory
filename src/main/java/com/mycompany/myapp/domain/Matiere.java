@@ -38,7 +38,7 @@ public class Matiere implements Serializable {
     @Column(name = "contenu")
     private String contenu;
 
-    @OneToMany(mappedBy = "matiere")
+    @OneToMany(mappedBy = "matiere", cascade = CascadeType.REMOVE)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<FormateurMatiere> formateurMatieres = new HashSet<>();
     @OneToMany(mappedBy = "matiere")
