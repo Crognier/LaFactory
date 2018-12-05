@@ -3,7 +3,7 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.LaFactoryApp;
 
 import com.mycompany.myapp.domain.Formateur;
-import com.mycompany.myapp.repository.FormateurRepository;
+import com.mycompany.myapp.service.FormateurService;
 import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -64,7 +64,7 @@ public class FormateurResourceIntTest {
     private static final String UPDATED_E_MAIL = "BBBBBBBBBB";
 
     @Autowired
-    private FormateurRepository formateurRepository;
+    private FormateurService formateurService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -85,7 +85,7 @@ public class FormateurResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final FormateurResource formateurResource = new FormateurResource(formateurRepository);
+        final FormateurResource formateurResource = new FormateurResource(formateurService);
         this.restFormateurMockMvc = MockMvcBuilders.standaloneSetup(formateurResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,7 +120,7 @@ public class FormateurResourceIntTest {
     @Test
     @Transactional
     public void createFormateur() throws Exception {
-        int databaseSizeBeforeCreate = formateurRepository.findAll().size();
+        int databaseSizeBeforeCreate = formateurService.findAll().size();
 
         // Create the Formateur
         restFormateurMockMvc.perform(post("/api/formateurs")
@@ -129,7 +129,7 @@ public class FormateurResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the Formateur in the database
-        List<Formateur> formateurList = formateurRepository.findAll();
+        List<Formateur> formateurList = formateurService.findAll();
         assertThat(formateurList).hasSize(databaseSizeBeforeCreate + 1);
         Formateur testFormateur = formateurList.get(formateurList.size() - 1);
         assertThat(testFormateur.getNom()).isEqualTo(DEFAULT_NOM);
@@ -145,7 +145,7 @@ public class FormateurResourceIntTest {
     @Test
     @Transactional
     public void createFormateurWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = formateurRepository.findAll().size();
+        int databaseSizeBeforeCreate = formateurService.findAll().size();
 
         // Create the Formateur with an existing ID
         formateur.setId(1L);
@@ -157,7 +157,7 @@ public class FormateurResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Formateur in the database
-        List<Formateur> formateurList = formateurRepository.findAll();
+        List<Formateur> formateurList = formateurService.findAll();
         assertThat(formateurList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -165,7 +165,7 @@ public class FormateurResourceIntTest {
     @Transactional
     public void getAllFormateurs() throws Exception {
         // Initialize the database
-        formateurRepository.saveAndFlush(formateur);
+        formateurService.saveAndFlush(formateur);
 
         // Get all the formateurList
         restFormateurMockMvc.perform(get("/api/formateurs?sort=id,desc"))
@@ -186,7 +186,7 @@ public class FormateurResourceIntTest {
     @Transactional
     public void getFormateur() throws Exception {
         // Initialize the database
-        formateurRepository.saveAndFlush(formateur);
+        formateurService.saveAndFlush(formateur);
 
         // Get the formateur
         restFormateurMockMvc.perform(get("/api/formateurs/{id}", formateur.getId()))
@@ -215,12 +215,12 @@ public class FormateurResourceIntTest {
     @Transactional
     public void updateFormateur() throws Exception {
         // Initialize the database
-        formateurRepository.saveAndFlush(formateur);
+        formateurService.saveAndFlush(formateur);
 
-        int databaseSizeBeforeUpdate = formateurRepository.findAll().size();
+        int databaseSizeBeforeUpdate = formateurService.findAll().size();
 
         // Update the formateur
-        Formateur updatedFormateur = formateurRepository.findById(formateur.getId()).get();
+        Formateur updatedFormateur = formateurService.findById(formateur.getId()).get();
         // Disconnect from session so that the updates on updatedFormateur are not directly saved in db
         em.detach(updatedFormateur);
         updatedFormateur
@@ -239,7 +239,7 @@ public class FormateurResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the Formateur in the database
-        List<Formateur> formateurList = formateurRepository.findAll();
+        List<Formateur> formateurList = formateurService.findAll();
         assertThat(formateurList).hasSize(databaseSizeBeforeUpdate);
         Formateur testFormateur = formateurList.get(formateurList.size() - 1);
         assertThat(testFormateur.getNom()).isEqualTo(UPDATED_NOM);
@@ -255,7 +255,7 @@ public class FormateurResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingFormateur() throws Exception {
-        int databaseSizeBeforeUpdate = formateurRepository.findAll().size();
+        int databaseSizeBeforeUpdate = formateurService.findAll().size();
 
         // Create the Formateur
 
@@ -266,7 +266,7 @@ public class FormateurResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Formateur in the database
-        List<Formateur> formateurList = formateurRepository.findAll();
+        List<Formateur> formateurList = formateurService.findAll();
         assertThat(formateurList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -274,9 +274,9 @@ public class FormateurResourceIntTest {
     @Transactional
     public void deleteFormateur() throws Exception {
         // Initialize the database
-        formateurRepository.saveAndFlush(formateur);
+        formateurService.saveAndFlush(formateur);
 
-        int databaseSizeBeforeDelete = formateurRepository.findAll().size();
+        int databaseSizeBeforeDelete = formateurService.findAll().size();
 
         // Get the formateur
         restFormateurMockMvc.perform(delete("/api/formateurs/{id}", formateur.getId())
@@ -284,7 +284,7 @@ public class FormateurResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Formateur> formateurList = formateurRepository.findAll();
+        List<Formateur> formateurList = formateurService.findAll();
         assertThat(formateurList).hasSize(databaseSizeBeforeDelete - 1);
     }
 

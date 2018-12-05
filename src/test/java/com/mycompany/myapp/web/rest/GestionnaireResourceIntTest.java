@@ -3,7 +3,7 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.LaFactoryApp;
 
 import com.mycompany.myapp.domain.Gestionnaire;
-import com.mycompany.myapp.repository.GestionnaireRepository;
+import com.mycompany.myapp.service.GestionnaireService;
 import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -64,7 +64,7 @@ public class GestionnaireResourceIntTest {
     private static final String UPDATED_E_MAIL = "BBBBBBBBBB";
 
     @Autowired
-    private GestionnaireRepository gestionnaireRepository;
+    private GestionnaireService gestionnaireService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -85,7 +85,7 @@ public class GestionnaireResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final GestionnaireResource gestionnaireResource = new GestionnaireResource(gestionnaireRepository);
+        final GestionnaireResource gestionnaireResource = new GestionnaireResource(gestionnaireService);
         this.restGestionnaireMockMvc = MockMvcBuilders.standaloneSetup(gestionnaireResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,7 +120,7 @@ public class GestionnaireResourceIntTest {
     @Test
     @Transactional
     public void createGestionnaire() throws Exception {
-        int databaseSizeBeforeCreate = gestionnaireRepository.findAll().size();
+        int databaseSizeBeforeCreate = gestionnaireService.findAll().size();
 
         // Create the Gestionnaire
         restGestionnaireMockMvc.perform(post("/api/gestionnaires")
@@ -129,7 +129,7 @@ public class GestionnaireResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the Gestionnaire in the database
-        List<Gestionnaire> gestionnaireList = gestionnaireRepository.findAll();
+        List<Gestionnaire> gestionnaireList = gestionnaireService.findAll();
         assertThat(gestionnaireList).hasSize(databaseSizeBeforeCreate + 1);
         Gestionnaire testGestionnaire = gestionnaireList.get(gestionnaireList.size() - 1);
         assertThat(testGestionnaire.getNom()).isEqualTo(DEFAULT_NOM);
@@ -145,7 +145,7 @@ public class GestionnaireResourceIntTest {
     @Test
     @Transactional
     public void createGestionnaireWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = gestionnaireRepository.findAll().size();
+        int databaseSizeBeforeCreate = gestionnaireService.findAll().size();
 
         // Create the Gestionnaire with an existing ID
         gestionnaire.setId(1L);
@@ -157,7 +157,7 @@ public class GestionnaireResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Gestionnaire in the database
-        List<Gestionnaire> gestionnaireList = gestionnaireRepository.findAll();
+        List<Gestionnaire> gestionnaireList = gestionnaireService.findAll();
         assertThat(gestionnaireList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -165,7 +165,7 @@ public class GestionnaireResourceIntTest {
     @Transactional
     public void getAllGestionnaires() throws Exception {
         // Initialize the database
-        gestionnaireRepository.saveAndFlush(gestionnaire);
+        gestionnaireService.saveAndFlush(gestionnaire);
 
         // Get all the gestionnaireList
         restGestionnaireMockMvc.perform(get("/api/gestionnaires?sort=id,desc"))
@@ -186,7 +186,7 @@ public class GestionnaireResourceIntTest {
     @Transactional
     public void getGestionnaire() throws Exception {
         // Initialize the database
-        gestionnaireRepository.saveAndFlush(gestionnaire);
+        gestionnaireService.saveAndFlush(gestionnaire);
 
         // Get the gestionnaire
         restGestionnaireMockMvc.perform(get("/api/gestionnaires/{id}", gestionnaire.getId()))
@@ -215,12 +215,12 @@ public class GestionnaireResourceIntTest {
     @Transactional
     public void updateGestionnaire() throws Exception {
         // Initialize the database
-        gestionnaireRepository.saveAndFlush(gestionnaire);
+        gestionnaireService.saveAndFlush(gestionnaire);
 
-        int databaseSizeBeforeUpdate = gestionnaireRepository.findAll().size();
+        int databaseSizeBeforeUpdate = gestionnaireService.findAll().size();
 
         // Update the gestionnaire
-        Gestionnaire updatedGestionnaire = gestionnaireRepository.findById(gestionnaire.getId()).get();
+        Gestionnaire updatedGestionnaire = gestionnaireService.findById(gestionnaire.getId()).get();
         // Disconnect from session so that the updates on updatedGestionnaire are not directly saved in db
         em.detach(updatedGestionnaire);
         updatedGestionnaire
@@ -239,7 +239,7 @@ public class GestionnaireResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the Gestionnaire in the database
-        List<Gestionnaire> gestionnaireList = gestionnaireRepository.findAll();
+        List<Gestionnaire> gestionnaireList = gestionnaireService.findAll();
         assertThat(gestionnaireList).hasSize(databaseSizeBeforeUpdate);
         Gestionnaire testGestionnaire = gestionnaireList.get(gestionnaireList.size() - 1);
         assertThat(testGestionnaire.getNom()).isEqualTo(UPDATED_NOM);
@@ -255,7 +255,7 @@ public class GestionnaireResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingGestionnaire() throws Exception {
-        int databaseSizeBeforeUpdate = gestionnaireRepository.findAll().size();
+        int databaseSizeBeforeUpdate = gestionnaireService.findAll().size();
 
         // Create the Gestionnaire
 
@@ -266,7 +266,7 @@ public class GestionnaireResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Gestionnaire in the database
-        List<Gestionnaire> gestionnaireList = gestionnaireRepository.findAll();
+        List<Gestionnaire> gestionnaireList = gestionnaireService.findAll();
         assertThat(gestionnaireList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -274,9 +274,9 @@ public class GestionnaireResourceIntTest {
     @Transactional
     public void deleteGestionnaire() throws Exception {
         // Initialize the database
-        gestionnaireRepository.saveAndFlush(gestionnaire);
+        gestionnaireService.saveAndFlush(gestionnaire);
 
-        int databaseSizeBeforeDelete = gestionnaireRepository.findAll().size();
+        int databaseSizeBeforeDelete = gestionnaireService.findAll().size();
 
         // Get the gestionnaire
         restGestionnaireMockMvc.perform(delete("/api/gestionnaires/{id}", gestionnaire.getId())
@@ -284,7 +284,7 @@ public class GestionnaireResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Gestionnaire> gestionnaireList = gestionnaireRepository.findAll();
+        List<Gestionnaire> gestionnaireList = gestionnaireService.findAll();
         assertThat(gestionnaireList).hasSize(databaseSizeBeforeDelete - 1);
     }
 

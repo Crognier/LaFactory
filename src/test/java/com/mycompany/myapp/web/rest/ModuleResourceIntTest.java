@@ -3,7 +3,7 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.LaFactoryApp;
 
 import com.mycompany.myapp.domain.Module;
-import com.mycompany.myapp.repository.ModuleRepository;
+import com.mycompany.myapp.service.ModuleService;
 import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -48,7 +48,7 @@ public class ModuleResourceIntTest {
     private static final Integer UPDATED_DUREE = 2;
 
     @Autowired
-    private ModuleRepository moduleRepository;
+    private ModuleService moduleService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -69,7 +69,7 @@ public class ModuleResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ModuleResource moduleResource = new ModuleResource(moduleRepository);
+        final ModuleResource moduleResource = new ModuleResource(moduleService);
         this.restModuleMockMvc = MockMvcBuilders.standaloneSetup(moduleResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -98,7 +98,7 @@ public class ModuleResourceIntTest {
     @Test
     @Transactional
     public void createModule() throws Exception {
-        int databaseSizeBeforeCreate = moduleRepository.findAll().size();
+        int databaseSizeBeforeCreate = moduleService.findAll().size();
 
         // Create the Module
         restModuleMockMvc.perform(post("/api/modules")
@@ -107,7 +107,7 @@ public class ModuleResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the Module in the database
-        List<Module> moduleList = moduleRepository.findAll();
+        List<Module> moduleList = moduleService.findAll();
         assertThat(moduleList).hasSize(databaseSizeBeforeCreate + 1);
         Module testModule = moduleList.get(moduleList.size() - 1);
         assertThat(testModule.getDateDebut()).isEqualTo(DEFAULT_DATE_DEBUT);
@@ -117,7 +117,7 @@ public class ModuleResourceIntTest {
     @Test
     @Transactional
     public void createModuleWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = moduleRepository.findAll().size();
+        int databaseSizeBeforeCreate = moduleService.findAll().size();
 
         // Create the Module with an existing ID
         module.setId(1L);
@@ -129,7 +129,7 @@ public class ModuleResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Module in the database
-        List<Module> moduleList = moduleRepository.findAll();
+        List<Module> moduleList = moduleService.findAll();
         assertThat(moduleList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -137,7 +137,7 @@ public class ModuleResourceIntTest {
     @Transactional
     public void getAllModules() throws Exception {
         // Initialize the database
-        moduleRepository.saveAndFlush(module);
+        moduleService.saveAndFlush(module);
 
         // Get all the moduleList
         restModuleMockMvc.perform(get("/api/modules?sort=id,desc"))
@@ -152,7 +152,7 @@ public class ModuleResourceIntTest {
     @Transactional
     public void getModule() throws Exception {
         // Initialize the database
-        moduleRepository.saveAndFlush(module);
+        moduleService.saveAndFlush(module);
 
         // Get the module
         restModuleMockMvc.perform(get("/api/modules/{id}", module.getId()))
@@ -175,12 +175,12 @@ public class ModuleResourceIntTest {
     @Transactional
     public void updateModule() throws Exception {
         // Initialize the database
-        moduleRepository.saveAndFlush(module);
+        moduleService.saveAndFlush(module);
 
-        int databaseSizeBeforeUpdate = moduleRepository.findAll().size();
+        int databaseSizeBeforeUpdate = moduleService.findAll().size();
 
         // Update the module
-        Module updatedModule = moduleRepository.findById(module.getId()).get();
+        Module updatedModule = moduleService.findById(module.getId()).get();
         // Disconnect from session so that the updates on updatedModule are not directly saved in db
         em.detach(updatedModule);
         updatedModule
@@ -193,7 +193,7 @@ public class ModuleResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the Module in the database
-        List<Module> moduleList = moduleRepository.findAll();
+        List<Module> moduleList = moduleService.findAll();
         assertThat(moduleList).hasSize(databaseSizeBeforeUpdate);
         Module testModule = moduleList.get(moduleList.size() - 1);
         assertThat(testModule.getDateDebut()).isEqualTo(UPDATED_DATE_DEBUT);
@@ -203,7 +203,7 @@ public class ModuleResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingModule() throws Exception {
-        int databaseSizeBeforeUpdate = moduleRepository.findAll().size();
+        int databaseSizeBeforeUpdate = moduleService.findAll().size();
 
         // Create the Module
 
@@ -214,7 +214,7 @@ public class ModuleResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Module in the database
-        List<Module> moduleList = moduleRepository.findAll();
+        List<Module> moduleList = moduleService.findAll();
         assertThat(moduleList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -222,9 +222,9 @@ public class ModuleResourceIntTest {
     @Transactional
     public void deleteModule() throws Exception {
         // Initialize the database
-        moduleRepository.saveAndFlush(module);
+        moduleService.saveAndFlush(module);
 
-        int databaseSizeBeforeDelete = moduleRepository.findAll().size();
+        int databaseSizeBeforeDelete = moduleService.findAll().size();
 
         // Get the module
         restModuleMockMvc.perform(delete("/api/modules/{id}", module.getId())
@@ -232,7 +232,7 @@ public class ModuleResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Module> moduleList = moduleRepository.findAll();
+        List<Module> moduleList = moduleService.findAll();
         assertThat(moduleList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
