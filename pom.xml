@@ -361,8 +361,6 @@
 							<artifactId>hibernate-jpamodelgen</artifactId>
 							<version>${hibernate.version}</version>
 						</path>
-
-<<<<<<< HEAD
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
@@ -1076,7 +1074,6 @@
 		</profile>
 		<!-- jhipster-needle-maven-add-profile -->
 	</profiles>
-=======
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
@@ -1796,5 +1793,4 @@
         </profile>
         <!-- jhipster-needle-maven-add-profile -->
     </profiles>
->>>>>>> master
 </project>
