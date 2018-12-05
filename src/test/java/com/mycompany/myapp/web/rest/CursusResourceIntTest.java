@@ -1,10 +1,21 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.LaFactoryApp;
+import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.mycompany.myapp.domain.Cursus;
-import com.mycompany.myapp.repository.CursusRepository;
-import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,17 +31,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.List;
-
-
-import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.mycompany.myapp.LaFactoryApp;
+import com.mycompany.myapp.domain.Cursus;
+import com.mycompany.myapp.service.CursusService;
+import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 /**
  * Test class for the CursusResource REST controller.
@@ -48,7 +52,7 @@ public class CursusResourceIntTest {
     private static final Integer UPDATED_DUREE = 2;
 
     @Autowired
-    private CursusRepository cursusRepository;
+    private CursusService cursusService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -69,7 +73,7 @@ public class CursusResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CursusResource cursusResource = new CursusResource(cursusRepository);
+        final CursusResource cursusResource = new CursusResource(cursusService);
         this.restCursusMockMvc = MockMvcBuilders.standaloneSetup(cursusResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -98,7 +102,7 @@ public class CursusResourceIntTest {
     @Test
     @Transactional
     public void createCursus() throws Exception {
-        int databaseSizeBeforeCreate = cursusRepository.findAll().size();
+        int databaseSizeBeforeCreate = cursusService.findAll().size();
 
         // Create the Cursus
         restCursusMockMvc.perform(post("/api/cursuses")
@@ -107,7 +111,7 @@ public class CursusResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the Cursus in the database
-        List<Cursus> cursusList = cursusRepository.findAll();
+        List<Cursus> cursusList = cursusService.findAll();
         assertThat(cursusList).hasSize(databaseSizeBeforeCreate + 1);
         Cursus testCursus = cursusList.get(cursusList.size() - 1);
         assertThat(testCursus.getDateDebut()).isEqualTo(DEFAULT_DATE_DEBUT);
@@ -117,7 +121,7 @@ public class CursusResourceIntTest {
     @Test
     @Transactional
     public void createCursusWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = cursusRepository.findAll().size();
+        int databaseSizeBeforeCreate = cursusService.findAll().size();
 
         // Create the Cursus with an existing ID
         cursus.setId(1L);
@@ -129,7 +133,7 @@ public class CursusResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Cursus in the database
-        List<Cursus> cursusList = cursusRepository.findAll();
+        List<Cursus> cursusList = cursusService.findAll();
         assertThat(cursusList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -137,7 +141,7 @@ public class CursusResourceIntTest {
     @Transactional
     public void getAllCursuses() throws Exception {
         // Initialize the database
-        cursusRepository.saveAndFlush(cursus);
+    	cursusService.saveAndFlush(cursus);
 
         // Get all the cursusList
         restCursusMockMvc.perform(get("/api/cursuses?sort=id,desc"))
@@ -152,7 +156,7 @@ public class CursusResourceIntTest {
     @Transactional
     public void getCursus() throws Exception {
         // Initialize the database
-        cursusRepository.saveAndFlush(cursus);
+    	cursusService.saveAndFlush(cursus);
 
         // Get the cursus
         restCursusMockMvc.perform(get("/api/cursuses/{id}", cursus.getId()))
@@ -175,12 +179,12 @@ public class CursusResourceIntTest {
     @Transactional
     public void updateCursus() throws Exception {
         // Initialize the database
-        cursusRepository.saveAndFlush(cursus);
+    	cursusService.saveAndFlush(cursus);
 
-        int databaseSizeBeforeUpdate = cursusRepository.findAll().size();
+        int databaseSizeBeforeUpdate = cursusService.findAll().size();
 
         // Update the cursus
-        Cursus updatedCursus = cursusRepository.findById(cursus.getId()).get();
+        Cursus updatedCursus = cursusService.findById(cursus.getId()).get();
         // Disconnect from session so that the updates on updatedCursus are not directly saved in db
         em.detach(updatedCursus);
         updatedCursus
@@ -193,7 +197,7 @@ public class CursusResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the Cursus in the database
-        List<Cursus> cursusList = cursusRepository.findAll();
+        List<Cursus> cursusList = cursusService.findAll();
         assertThat(cursusList).hasSize(databaseSizeBeforeUpdate);
         Cursus testCursus = cursusList.get(cursusList.size() - 1);
         assertThat(testCursus.getDateDebut()).isEqualTo(UPDATED_DATE_DEBUT);
@@ -203,7 +207,7 @@ public class CursusResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingCursus() throws Exception {
-        int databaseSizeBeforeUpdate = cursusRepository.findAll().size();
+        int databaseSizeBeforeUpdate = cursusService.findAll().size();
 
         // Create the Cursus
 
@@ -214,7 +218,7 @@ public class CursusResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Cursus in the database
-        List<Cursus> cursusList = cursusRepository.findAll();
+        List<Cursus> cursusList = cursusService.findAll();
         assertThat(cursusList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -222,9 +226,9 @@ public class CursusResourceIntTest {
     @Transactional
     public void deleteCursus() throws Exception {
         // Initialize the database
-        cursusRepository.saveAndFlush(cursus);
+    	cursusService.saveAndFlush(cursus);
 
-        int databaseSizeBeforeDelete = cursusRepository.findAll().size();
+        int databaseSizeBeforeDelete = cursusService.findAll().size();
 
         // Get the cursus
         restCursusMockMvc.perform(delete("/api/cursuses/{id}", cursus.getId())
@@ -232,7 +236,7 @@ public class CursusResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Cursus> cursusList = cursusRepository.findAll();
+        List<Cursus> cursusList = cursusService.findAll();
         assertThat(cursusList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
