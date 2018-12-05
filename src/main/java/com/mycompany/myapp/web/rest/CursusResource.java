@@ -106,7 +106,7 @@ public class CursusResource {
     @Timed
     public ResponseEntity<Cursus> getCursus(@PathVariable Long id) {
         log.debug("REST request to get Cursus : {}", id);
-        Optional<Cursus> cursus = cursusService.findById(id);
+        Optional<Cursus> cursus = cursusService.findByIdWithModules(id);
         return ResponseUtil.wrapOrNotFound(cursus);
     }
 

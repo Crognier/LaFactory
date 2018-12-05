@@ -31,9 +31,17 @@ public class CursusService {
 	
 	public Optional<Cursus> findById(Long id) {
 		return cursusRepository.findById(id);
+		
 	}
 	
 	public void deleteById(Long id) {
 		cursusRepository.deleteById(id);
 	}
+	
+	public Optional<Cursus> findByIdWithModules(Long id) {
+		return cursusRepository.findByIdWithModules(id);
+	}
+	
+	
+	
 }
