@@ -16,7 +16,6 @@ export class CursusDetailComponent implements OnInit {
 
         this.activatedRoute.data.subscribe(({ cursus }) => {
             this.cursus = cursus;
-            console.log(this.cursus.modules);
         });
     }
 

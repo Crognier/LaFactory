@@ -6,18 +6,22 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.myapp.domain.Module;
+import com.mycompany.myapp.repository.CursusRepository;
 import com.mycompany.myapp.repository.ModuleRepository;
 
 @Service
 public class ModuleService {
 
 	private final ModuleRepository moduleRepository;
+	private CursusService cursusService;
+	private CursusRepository cursusRepository;
 
 	public ModuleService(ModuleRepository moduleRepository) {
 		this.moduleRepository = moduleRepository;
 	}
 
 	public Module save(Module module) {
+
 		return moduleRepository.save(module);
 	}
 

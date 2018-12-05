@@ -1,6 +1,9 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Cursus;
+import com.mycompany.myapp.domain.Module;
+
+import io.swagger.models.Model;
 
 import java.util.Optional;
 
