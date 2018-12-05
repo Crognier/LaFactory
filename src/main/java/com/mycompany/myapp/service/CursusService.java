@@ -30,6 +30,6 @@ public class CursusService {
 	}
 	
 	public void deleteById(Long id) {
-		return cursusRepository.deleteById(id);
+		cursusRepository.deleteById(id);
 	}
 }
