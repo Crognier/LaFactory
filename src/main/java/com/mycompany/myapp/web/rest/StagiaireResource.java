@@ -1,21 +1,29 @@
 package com.mycompany.myapp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.mycompany.myapp.domain.Stagiaire;
-import com.mycompany.myapp.repository.StagiaireRepository;
-import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-import com.mycompany.myapp.web.rest.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.codahale.metrics.annotation.Timed;
+import com.mycompany.myapp.domain.Stagiaire;
+import com.mycompany.myapp.service.StagiaireService;
+import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import com.mycompany.myapp.web.rest.util.HeaderUtil;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing Stagiaire.
@@ -28,10 +36,10 @@ public class StagiaireResource {
 
     private static final String ENTITY_NAME = "stagiaire";
 
-    private final StagiaireRepository stagiaireRepository;
+    private final StagiaireService stagiaireService;
 
-    public StagiaireResource(StagiaireRepository stagiaireRepository) {
-        this.stagiaireRepository = stagiaireRepository;
+    public StagiaireResource(StagiaireService stagiaireService) {
+        this.stagiaireService = stagiaireService;
     }
 
     /**
@@ -48,7 +56,7 @@ public class StagiaireResource {
         if (stagiaire.getId() != null) {
             throw new BadRequestAlertException("A new stagiaire cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Stagiaire result = stagiaireRepository.save(stagiaire);
+        Stagiaire result = stagiaireService.save(stagiaire);
         return ResponseEntity.created(new URI("/api/stagiaires/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +78,7 @@ public class StagiaireResource {
         if (stagiaire.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Stagiaire result = stagiaireRepository.save(stagiaire);
+        Stagiaire result = stagiaireService.save(stagiaire);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, stagiaire.getId().toString()))
             .body(result);
@@ -85,7 +93,7 @@ public class StagiaireResource {
     @Timed
     public List<Stagiaire> getAllStagiaires() {
         log.debug("REST request to get all Stagiaires");
-        return stagiaireRepository.findAll();
+        return stagiaireService.findAll();
     }
 
     /**
@@ -98,7 +106,7 @@ public class StagiaireResource {
     @Timed
     public ResponseEntity<Stagiaire> getStagiaire(@PathVariable Long id) {
         log.debug("REST request to get Stagiaire : {}", id);
-        Optional<Stagiaire> stagiaire = stagiaireRepository.findById(id);
+        Optional<Stagiaire> stagiaire = stagiaireService.findById(id);
         return ResponseUtil.wrapOrNotFound(stagiaire);
     }
 
@@ -113,7 +121,7 @@ public class StagiaireResource {
     public ResponseEntity<Void> deleteStagiaire(@PathVariable Long id) {
         log.debug("REST request to delete Stagiaire : {}", id);
 
-        stagiaireRepository.deleteById(id);
+        stagiaireService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

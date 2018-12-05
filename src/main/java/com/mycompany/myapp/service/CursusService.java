@@ -21,6 +21,10 @@ public class CursusService {
 		return cursusRepository.save(cursus);
 	}
 	
+	public Cursus saveAndFlush(Cursus cursus) {
+		return cursusRepository.saveAndFlush(cursus);
+	}
+	
 	public List<Cursus> findAll() {
 		return cursusRepository.findAll();
 	}
@@ -30,6 +34,6 @@ public class CursusService {
 	}
 	
 	public void deleteById(Long id) {
-		return cursusRepository.deleteById(id);
+		cursusRepository.deleteById(id);
 	}
 }

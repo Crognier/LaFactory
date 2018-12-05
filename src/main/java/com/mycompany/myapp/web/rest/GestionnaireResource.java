@@ -2,7 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.mycompany.myapp.domain.Gestionnaire;
-import com.mycompany.myapp.repository.GestionnaireRepository;
+import com.mycompany.myapp.service.GestionnaireService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -28,10 +28,10 @@ public class GestionnaireResource {
 
     private static final String ENTITY_NAME = "gestionnaire";
 
-    private final GestionnaireRepository gestionnaireRepository;
+    private final GestionnaireService gestionnaireService;
 
-    public GestionnaireResource(GestionnaireRepository gestionnaireRepository) {
-        this.gestionnaireRepository = gestionnaireRepository;
+    public GestionnaireResource(GestionnaireService gestionnaireService) {
+        this.gestionnaireService = gestionnaireService;
     }
 
     /**
@@ -48,7 +48,7 @@ public class GestionnaireResource {
         if (gestionnaire.getId() != null) {
             throw new BadRequestAlertException("A new gestionnaire cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Gestionnaire result = gestionnaireRepository.save(gestionnaire);
+        Gestionnaire result = gestionnaireService.save(gestionnaire);
         return ResponseEntity.created(new URI("/api/gestionnaires/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +70,7 @@ public class GestionnaireResource {
         if (gestionnaire.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Gestionnaire result = gestionnaireRepository.save(gestionnaire);
+        Gestionnaire result = gestionnaireService.save(gestionnaire);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, gestionnaire.getId().toString()))
             .body(result);
@@ -85,7 +85,7 @@ public class GestionnaireResource {
     @Timed
     public List<Gestionnaire> getAllGestionnaires() {
         log.debug("REST request to get all Gestionnaires");
-        return gestionnaireRepository.findAll();
+        return gestionnaireService.findAll();
     }
 
     /**
@@ -98,7 +98,7 @@ public class GestionnaireResource {
     @Timed
     public ResponseEntity<Gestionnaire> getGestionnaire(@PathVariable Long id) {
         log.debug("REST request to get Gestionnaire : {}", id);
-        Optional<Gestionnaire> gestionnaire = gestionnaireRepository.findById(id);
+        Optional<Gestionnaire> gestionnaire = gestionnaireService.findById(id);
         return ResponseUtil.wrapOrNotFound(gestionnaire);
     }
 
@@ -113,7 +113,7 @@ public class GestionnaireResource {
     public ResponseEntity<Void> deleteGestionnaire(@PathVariable Long id) {
         log.debug("REST request to delete Gestionnaire : {}", id);
 
-        gestionnaireRepository.deleteById(id);
+        gestionnaireService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

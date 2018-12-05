@@ -1,10 +1,19 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.LaFactoryApp;
+import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.mycompany.myapp.domain.Technicien;
-import com.mycompany.myapp.repository.TechnicienRepository;
-import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,15 +29,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.List;
-
-
-import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.mycompany.myapp.LaFactoryApp;
+import com.mycompany.myapp.domain.Technicien;
+import com.mycompany.myapp.service.TechnicienService;
+import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 /**
  * Test class for the TechnicienResource REST controller.
@@ -64,7 +68,7 @@ public class TechnicienResourceIntTest {
     private static final String UPDATED_E_MAIL = "BBBBBBBBBB";
 
     @Autowired
-    private TechnicienRepository technicienRepository;
+    private TechnicienService technicienService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -85,7 +89,7 @@ public class TechnicienResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TechnicienResource technicienResource = new TechnicienResource(technicienRepository);
+        final TechnicienResource technicienResource = new TechnicienResource(technicienService);
         this.restTechnicienMockMvc = MockMvcBuilders.standaloneSetup(technicienResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,7 +124,7 @@ public class TechnicienResourceIntTest {
     @Test
     @Transactional
     public void createTechnicien() throws Exception {
-        int databaseSizeBeforeCreate = technicienRepository.findAll().size();
+        int databaseSizeBeforeCreate = technicienService.findAll().size();
 
         // Create the Technicien
         restTechnicienMockMvc.perform(post("/api/techniciens")
@@ -129,7 +133,7 @@ public class TechnicienResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the Technicien in the database
-        List<Technicien> technicienList = technicienRepository.findAll();
+        List<Technicien> technicienList = technicienService.findAll();
         assertThat(technicienList).hasSize(databaseSizeBeforeCreate + 1);
         Technicien testTechnicien = technicienList.get(technicienList.size() - 1);
         assertThat(testTechnicien.getNom()).isEqualTo(DEFAULT_NOM);
@@ -145,7 +149,7 @@ public class TechnicienResourceIntTest {
     @Test
     @Transactional
     public void createTechnicienWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = technicienRepository.findAll().size();
+        int databaseSizeBeforeCreate = technicienService.findAll().size();
 
         // Create the Technicien with an existing ID
         technicien.setId(1L);
@@ -157,7 +161,7 @@ public class TechnicienResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Technicien in the database
-        List<Technicien> technicienList = technicienRepository.findAll();
+        List<Technicien> technicienList = technicienService.findAll();
         assertThat(technicienList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -165,7 +169,7 @@ public class TechnicienResourceIntTest {
     @Transactional
     public void getAllTechniciens() throws Exception {
         // Initialize the database
-        technicienRepository.saveAndFlush(technicien);
+        technicienService.saveAndFlush(technicien);
 
         // Get all the technicienList
         restTechnicienMockMvc.perform(get("/api/techniciens?sort=id,desc"))
@@ -186,7 +190,7 @@ public class TechnicienResourceIntTest {
     @Transactional
     public void getTechnicien() throws Exception {
         // Initialize the database
-        technicienRepository.saveAndFlush(technicien);
+        technicienService.saveAndFlush(technicien);
 
         // Get the technicien
         restTechnicienMockMvc.perform(get("/api/techniciens/{id}", technicien.getId()))
@@ -215,12 +219,12 @@ public class TechnicienResourceIntTest {
     @Transactional
     public void updateTechnicien() throws Exception {
         // Initialize the database
-        technicienRepository.saveAndFlush(technicien);
+        technicienService.saveAndFlush(technicien);
 
-        int databaseSizeBeforeUpdate = technicienRepository.findAll().size();
+        int databaseSizeBeforeUpdate = technicienService.findAll().size();
 
         // Update the technicien
-        Technicien updatedTechnicien = technicienRepository.findById(technicien.getId()).get();
+        Technicien updatedTechnicien = technicienService.findById(technicien.getId()).get();
         // Disconnect from session so that the updates on updatedTechnicien are not directly saved in db
         em.detach(updatedTechnicien);
         updatedTechnicien
@@ -239,7 +243,7 @@ public class TechnicienResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the Technicien in the database
-        List<Technicien> technicienList = technicienRepository.findAll();
+        List<Technicien> technicienList = technicienService.findAll();
         assertThat(technicienList).hasSize(databaseSizeBeforeUpdate);
         Technicien testTechnicien = technicienList.get(technicienList.size() - 1);
         assertThat(testTechnicien.getNom()).isEqualTo(UPDATED_NOM);
@@ -255,7 +259,7 @@ public class TechnicienResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingTechnicien() throws Exception {
-        int databaseSizeBeforeUpdate = technicienRepository.findAll().size();
+        int databaseSizeBeforeUpdate = technicienService.findAll().size();
 
         // Create the Technicien
 
@@ -266,7 +270,7 @@ public class TechnicienResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Technicien in the database
-        List<Technicien> technicienList = technicienRepository.findAll();
+        List<Technicien> technicienList = technicienService.findAll();
         assertThat(technicienList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -274,9 +278,9 @@ public class TechnicienResourceIntTest {
     @Transactional
     public void deleteTechnicien() throws Exception {
         // Initialize the database
-        technicienRepository.saveAndFlush(technicien);
+        technicienService.saveAndFlush(technicien);
 
-        int databaseSizeBeforeDelete = technicienRepository.findAll().size();
+        int databaseSizeBeforeDelete = technicienService.findAll().size();
 
         // Get the technicien
         restTechnicienMockMvc.perform(delete("/api/techniciens/{id}", technicien.getId())
@@ -284,7 +288,7 @@ public class TechnicienResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Technicien> technicienList = technicienRepository.findAll();
+        List<Technicien> technicienList = technicienService.findAll();
         assertThat(technicienList).hasSize(databaseSizeBeforeDelete - 1);
     }
 

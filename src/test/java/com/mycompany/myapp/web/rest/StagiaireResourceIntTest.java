@@ -1,10 +1,19 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.LaFactoryApp;
+import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.mycompany.myapp.domain.Stagiaire;
-import com.mycompany.myapp.repository.StagiaireRepository;
-import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,17 +29,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.List;
-
-
-import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import com.mycompany.myapp.LaFactoryApp;
+import com.mycompany.myapp.domain.Stagiaire;
 import com.mycompany.myapp.domain.enumeration.Niveau;
+import com.mycompany.myapp.service.StagiaireService;
+import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 /**
  * Test class for the StagiaireResource REST controller.
  *
@@ -68,7 +71,7 @@ public class StagiaireResourceIntTest {
     private static final Niveau UPDATED_NIVEAU = Niveau.INTERMEDIAIRE;
 
     @Autowired
-    private StagiaireRepository stagiaireRepository;
+    private StagiaireService stagiaireService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -89,7 +92,7 @@ public class StagiaireResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final StagiaireResource stagiaireResource = new StagiaireResource(stagiaireRepository);
+        final StagiaireResource stagiaireResource = new StagiaireResource(stagiaireService);
         this.restStagiaireMockMvc = MockMvcBuilders.standaloneSetup(stagiaireResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -125,7 +128,7 @@ public class StagiaireResourceIntTest {
     @Test
     @Transactional
     public void createStagiaire() throws Exception {
-        int databaseSizeBeforeCreate = stagiaireRepository.findAll().size();
+        int databaseSizeBeforeCreate = stagiaireService.findAll().size();
 
         // Create the Stagiaire
         restStagiaireMockMvc.perform(post("/api/stagiaires")
@@ -134,7 +137,7 @@ public class StagiaireResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the Stagiaire in the database
-        List<Stagiaire> stagiaireList = stagiaireRepository.findAll();
+        List<Stagiaire> stagiaireList = stagiaireService.findAll();
         assertThat(stagiaireList).hasSize(databaseSizeBeforeCreate + 1);
         Stagiaire testStagiaire = stagiaireList.get(stagiaireList.size() - 1);
         assertThat(testStagiaire.getNom()).isEqualTo(DEFAULT_NOM);
@@ -151,7 +154,7 @@ public class StagiaireResourceIntTest {
     @Test
     @Transactional
     public void createStagiaireWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = stagiaireRepository.findAll().size();
+        int databaseSizeBeforeCreate = stagiaireService.findAll().size();
 
         // Create the Stagiaire with an existing ID
         stagiaire.setId(1L);
@@ -163,7 +166,7 @@ public class StagiaireResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Stagiaire in the database
-        List<Stagiaire> stagiaireList = stagiaireRepository.findAll();
+        List<Stagiaire> stagiaireList = stagiaireService.findAll();
         assertThat(stagiaireList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -171,7 +174,7 @@ public class StagiaireResourceIntTest {
     @Transactional
     public void getAllStagiaires() throws Exception {
         // Initialize the database
-        stagiaireRepository.saveAndFlush(stagiaire);
+        stagiaireService.saveAndFlush(stagiaire);
 
         // Get all the stagiaireList
         restStagiaireMockMvc.perform(get("/api/stagiaires?sort=id,desc"))
@@ -193,7 +196,7 @@ public class StagiaireResourceIntTest {
     @Transactional
     public void getStagiaire() throws Exception {
         // Initialize the database
-        stagiaireRepository.saveAndFlush(stagiaire);
+        stagiaireService.saveAndFlush(stagiaire);
 
         // Get the stagiaire
         restStagiaireMockMvc.perform(get("/api/stagiaires/{id}", stagiaire.getId()))
@@ -223,12 +226,12 @@ public class StagiaireResourceIntTest {
     @Transactional
     public void updateStagiaire() throws Exception {
         // Initialize the database
-        stagiaireRepository.saveAndFlush(stagiaire);
+        stagiaireService.saveAndFlush(stagiaire);
 
-        int databaseSizeBeforeUpdate = stagiaireRepository.findAll().size();
+        int databaseSizeBeforeUpdate = stagiaireService.findAll().size();
 
         // Update the stagiaire
-        Stagiaire updatedStagiaire = stagiaireRepository.findById(stagiaire.getId()).get();
+        Stagiaire updatedStagiaire = stagiaireService.findById(stagiaire.getId()).get();
         // Disconnect from session so that the updates on updatedStagiaire are not directly saved in db
         em.detach(updatedStagiaire);
         updatedStagiaire
@@ -248,7 +251,7 @@ public class StagiaireResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the Stagiaire in the database
-        List<Stagiaire> stagiaireList = stagiaireRepository.findAll();
+        List<Stagiaire> stagiaireList = stagiaireService.findAll();
         assertThat(stagiaireList).hasSize(databaseSizeBeforeUpdate);
         Stagiaire testStagiaire = stagiaireList.get(stagiaireList.size() - 1);
         assertThat(testStagiaire.getNom()).isEqualTo(UPDATED_NOM);
@@ -265,7 +268,7 @@ public class StagiaireResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingStagiaire() throws Exception {
-        int databaseSizeBeforeUpdate = stagiaireRepository.findAll().size();
+        int databaseSizeBeforeUpdate = stagiaireService.findAll().size();
 
         // Create the Stagiaire
 
@@ -276,7 +279,7 @@ public class StagiaireResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Stagiaire in the database
-        List<Stagiaire> stagiaireList = stagiaireRepository.findAll();
+        List<Stagiaire> stagiaireList = stagiaireService.findAll();
         assertThat(stagiaireList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -284,9 +287,9 @@ public class StagiaireResourceIntTest {
     @Transactional
     public void deleteStagiaire() throws Exception {
         // Initialize the database
-        stagiaireRepository.saveAndFlush(stagiaire);
+        stagiaireService.saveAndFlush(stagiaire);
 
-        int databaseSizeBeforeDelete = stagiaireRepository.findAll().size();
+        int databaseSizeBeforeDelete = stagiaireService.findAll().size();
 
         // Get the stagiaire
         restStagiaireMockMvc.perform(delete("/api/stagiaires/{id}", stagiaire.getId())
@@ -294,7 +297,7 @@ public class StagiaireResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Stagiaire> stagiaireList = stagiaireRepository.findAll();
+        List<Stagiaire> stagiaireList = stagiaireService.findAll();
         assertThat(stagiaireList).hasSize(databaseSizeBeforeDelete - 1);
     }
 

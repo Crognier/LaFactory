@@ -1,10 +1,19 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.LaFactoryApp;
+import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.mycompany.myapp.domain.Salle;
-import com.mycompany.myapp.repository.SalleRepository;
-import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,15 +29,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.List;
-
-
-import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.mycompany.myapp.LaFactoryApp;
+import com.mycompany.myapp.domain.Salle;
+import com.mycompany.myapp.service.SalleService;
+import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 /**
  * Test class for the SalleResource REST controller.
@@ -49,7 +53,7 @@ public class SalleResourceIntTest {
     private static final Integer UPDATED_CAPACITE = 2;
 
     @Autowired
-    private SalleRepository salleRepository;
+    private SalleService salleService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -70,7 +74,7 @@ public class SalleResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SalleResource salleResource = new SalleResource(salleRepository);
+        final SalleResource salleResource = new SalleResource(salleService);
         this.restSalleMockMvc = MockMvcBuilders.standaloneSetup(salleResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -100,7 +104,7 @@ public class SalleResourceIntTest {
     @Test
     @Transactional
     public void createSalle() throws Exception {
-        int databaseSizeBeforeCreate = salleRepository.findAll().size();
+        int databaseSizeBeforeCreate = salleService.findAll().size();
 
         // Create the Salle
         restSalleMockMvc.perform(post("/api/salles")
@@ -109,7 +113,7 @@ public class SalleResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the Salle in the database
-        List<Salle> salleList = salleRepository.findAll();
+        List<Salle> salleList = salleService.findAll();
         assertThat(salleList).hasSize(databaseSizeBeforeCreate + 1);
         Salle testSalle = salleList.get(salleList.size() - 1);
         assertThat(testSalle.getCode()).isEqualTo(DEFAULT_CODE);
@@ -120,7 +124,7 @@ public class SalleResourceIntTest {
     @Test
     @Transactional
     public void createSalleWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = salleRepository.findAll().size();
+        int databaseSizeBeforeCreate = salleService.findAll().size();
 
         // Create the Salle with an existing ID
         salle.setId(1L);
@@ -132,7 +136,7 @@ public class SalleResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Salle in the database
-        List<Salle> salleList = salleRepository.findAll();
+        List<Salle> salleList = salleService.findAll();
         assertThat(salleList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -140,7 +144,7 @@ public class SalleResourceIntTest {
     @Transactional
     public void getAllSalles() throws Exception {
         // Initialize the database
-        salleRepository.saveAndFlush(salle);
+        salleService.saveAndFlush(salle);
 
         // Get all the salleList
         restSalleMockMvc.perform(get("/api/salles?sort=id,desc"))
@@ -156,7 +160,7 @@ public class SalleResourceIntTest {
     @Transactional
     public void getSalle() throws Exception {
         // Initialize the database
-        salleRepository.saveAndFlush(salle);
+        salleService.saveAndFlush(salle);
 
         // Get the salle
         restSalleMockMvc.perform(get("/api/salles/{id}", salle.getId()))
@@ -180,12 +184,12 @@ public class SalleResourceIntTest {
     @Transactional
     public void updateSalle() throws Exception {
         // Initialize the database
-        salleRepository.saveAndFlush(salle);
+        salleService.saveAndFlush(salle);
 
-        int databaseSizeBeforeUpdate = salleRepository.findAll().size();
+        int databaseSizeBeforeUpdate = salleService.findAll().size();
 
         // Update the salle
-        Salle updatedSalle = salleRepository.findById(salle.getId()).get();
+        Salle updatedSalle = salleService.findById(salle.getId()).get();
         // Disconnect from session so that the updates on updatedSalle are not directly saved in db
         em.detach(updatedSalle);
         updatedSalle
@@ -199,7 +203,7 @@ public class SalleResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the Salle in the database
-        List<Salle> salleList = salleRepository.findAll();
+        List<Salle> salleList = salleService.findAll();
         assertThat(salleList).hasSize(databaseSizeBeforeUpdate);
         Salle testSalle = salleList.get(salleList.size() - 1);
         assertThat(testSalle.getCode()).isEqualTo(UPDATED_CODE);
@@ -210,7 +214,7 @@ public class SalleResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingSalle() throws Exception {
-        int databaseSizeBeforeUpdate = salleRepository.findAll().size();
+        int databaseSizeBeforeUpdate = salleService.findAll().size();
 
         // Create the Salle
 
@@ -221,7 +225,7 @@ public class SalleResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Salle in the database
-        List<Salle> salleList = salleRepository.findAll();
+        List<Salle> salleList = salleService.findAll();
         assertThat(salleList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -229,9 +233,9 @@ public class SalleResourceIntTest {
     @Transactional
     public void deleteSalle() throws Exception {
         // Initialize the database
-        salleRepository.saveAndFlush(salle);
+        salleService.saveAndFlush(salle);
 
-        int databaseSizeBeforeDelete = salleRepository.findAll().size();
+        int databaseSizeBeforeDelete = salleService.findAll().size();
 
         // Get the salle
         restSalleMockMvc.perform(delete("/api/salles/{id}", salle.getId())
@@ -239,7 +243,7 @@ public class SalleResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Salle> salleList = salleRepository.findAll();
+        List<Salle> salleList = salleService.findAll();
         assertThat(salleList).hasSize(databaseSizeBeforeDelete - 1);
     }
 

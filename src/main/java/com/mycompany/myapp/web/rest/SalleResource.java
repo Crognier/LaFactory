@@ -1,21 +1,29 @@
 package com.mycompany.myapp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.mycompany.myapp.domain.Salle;
-import com.mycompany.myapp.repository.SalleRepository;
-import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-import com.mycompany.myapp.web.rest.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.codahale.metrics.annotation.Timed;
+import com.mycompany.myapp.domain.Salle;
+import com.mycompany.myapp.service.SalleService;
+import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import com.mycompany.myapp.web.rest.util.HeaderUtil;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing Salle.
@@ -28,10 +36,10 @@ public class SalleResource {
 
     private static final String ENTITY_NAME = "salle";
 
-    private final SalleRepository salleRepository;
+    private final SalleService salleService;
 
-    public SalleResource(SalleRepository salleRepository) {
-        this.salleRepository = salleRepository;
+    public SalleResource(SalleService salleService) {
+        this.salleService = salleService;
     }
 
     /**
@@ -48,7 +56,7 @@ public class SalleResource {
         if (salle.getId() != null) {
             throw new BadRequestAlertException("A new salle cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Salle result = salleRepository.save(salle);
+        Salle result = salleService.save(salle);
         return ResponseEntity.created(new URI("/api/salles/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +78,7 @@ public class SalleResource {
         if (salle.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Salle result = salleRepository.save(salle);
+        Salle result = salleService.save(salle);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, salle.getId().toString()))
             .body(result);
@@ -85,7 +93,7 @@ public class SalleResource {
     @Timed
     public List<Salle> getAllSalles() {
         log.debug("REST request to get all Salles");
-        return salleRepository.findAll();
+        return salleService.findAll();
     }
 
     /**
@@ -98,7 +106,7 @@ public class SalleResource {
     @Timed
     public ResponseEntity<Salle> getSalle(@PathVariable Long id) {
         log.debug("REST request to get Salle : {}", id);
-        Optional<Salle> salle = salleRepository.findById(id);
+        Optional<Salle> salle = salleService.findById(id);
         return ResponseUtil.wrapOrNotFound(salle);
     }
 
@@ -113,7 +121,7 @@ public class SalleResource {
     public ResponseEntity<Void> deleteSalle(@PathVariable Long id) {
         log.debug("REST request to delete Salle : {}", id);
 
-        salleRepository.deleteById(id);
+        salleService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

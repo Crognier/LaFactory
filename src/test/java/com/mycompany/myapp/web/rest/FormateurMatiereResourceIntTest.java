@@ -3,7 +3,7 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.LaFactoryApp;
 
 import com.mycompany.myapp.domain.FormateurMatiere;
-import com.mycompany.myapp.repository.FormateurMatiereRepository;
+import com.mycompany.myapp.service.FormateurMatiereService;
 import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -44,7 +44,7 @@ public class FormateurMatiereResourceIntTest {
     private static final Niveau UPDATED_NIVEAU = Niveau.INTERMEDIAIRE;
 
     @Autowired
-    private FormateurMatiereRepository formateurMatiereRepository;
+    private FormateurMatiereService formateurMatiereService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -65,7 +65,7 @@ public class FormateurMatiereResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final FormateurMatiereResource formateurMatiereResource = new FormateurMatiereResource(formateurMatiereRepository);
+        final FormateurMatiereResource formateurMatiereResource = new FormateurMatiereResource(formateurMatiereService);
         this.restFormateurMatiereMockMvc = MockMvcBuilders.standaloneSetup(formateurMatiereResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -93,7 +93,7 @@ public class FormateurMatiereResourceIntTest {
     @Test
     @Transactional
     public void createFormateurMatiere() throws Exception {
-        int databaseSizeBeforeCreate = formateurMatiereRepository.findAll().size();
+        int databaseSizeBeforeCreate = formateurMatiereService.findAll().size();
 
         // Create the FormateurMatiere
         restFormateurMatiereMockMvc.perform(post("/api/formateur-matieres")
@@ -102,7 +102,7 @@ public class FormateurMatiereResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the FormateurMatiere in the database
-        List<FormateurMatiere> formateurMatiereList = formateurMatiereRepository.findAll();
+        List<FormateurMatiere> formateurMatiereList = formateurMatiereService.findAll();
         assertThat(formateurMatiereList).hasSize(databaseSizeBeforeCreate + 1);
         FormateurMatiere testFormateurMatiere = formateurMatiereList.get(formateurMatiereList.size() - 1);
         assertThat(testFormateurMatiere.getNiveau()).isEqualTo(DEFAULT_NIVEAU);
@@ -111,7 +111,7 @@ public class FormateurMatiereResourceIntTest {
     @Test
     @Transactional
     public void createFormateurMatiereWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = formateurMatiereRepository.findAll().size();
+        int databaseSizeBeforeCreate = formateurMatiereService.findAll().size();
 
         // Create the FormateurMatiere with an existing ID
         formateurMatiere.setId(1L);
@@ -123,7 +123,7 @@ public class FormateurMatiereResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the FormateurMatiere in the database
-        List<FormateurMatiere> formateurMatiereList = formateurMatiereRepository.findAll();
+        List<FormateurMatiere> formateurMatiereList = formateurMatiereService.findAll();
         assertThat(formateurMatiereList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -131,7 +131,7 @@ public class FormateurMatiereResourceIntTest {
     @Transactional
     public void getAllFormateurMatieres() throws Exception {
         // Initialize the database
-        formateurMatiereRepository.saveAndFlush(formateurMatiere);
+        formateurMatiereService.saveAndFlush(formateurMatiere);
 
         // Get all the formateurMatiereList
         restFormateurMatiereMockMvc.perform(get("/api/formateur-matieres?sort=id,desc"))
@@ -145,7 +145,7 @@ public class FormateurMatiereResourceIntTest {
     @Transactional
     public void getFormateurMatiere() throws Exception {
         // Initialize the database
-        formateurMatiereRepository.saveAndFlush(formateurMatiere);
+        formateurMatiereService.saveAndFlush(formateurMatiere);
 
         // Get the formateurMatiere
         restFormateurMatiereMockMvc.perform(get("/api/formateur-matieres/{id}", formateurMatiere.getId()))
@@ -167,12 +167,12 @@ public class FormateurMatiereResourceIntTest {
     @Transactional
     public void updateFormateurMatiere() throws Exception {
         // Initialize the database
-        formateurMatiereRepository.saveAndFlush(formateurMatiere);
+        formateurMatiereService.saveAndFlush(formateurMatiere);
 
-        int databaseSizeBeforeUpdate = formateurMatiereRepository.findAll().size();
+        int databaseSizeBeforeUpdate = formateurMatiereService.findAll().size();
 
         // Update the formateurMatiere
-        FormateurMatiere updatedFormateurMatiere = formateurMatiereRepository.findById(formateurMatiere.getId()).get();
+        FormateurMatiere updatedFormateurMatiere = formateurMatiereService.findById(formateurMatiere.getId()).get();
         // Disconnect from session so that the updates on updatedFormateurMatiere are not directly saved in db
         em.detach(updatedFormateurMatiere);
         updatedFormateurMatiere
@@ -184,7 +184,7 @@ public class FormateurMatiereResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the FormateurMatiere in the database
-        List<FormateurMatiere> formateurMatiereList = formateurMatiereRepository.findAll();
+        List<FormateurMatiere> formateurMatiereList = formateurMatiereService.findAll();
         assertThat(formateurMatiereList).hasSize(databaseSizeBeforeUpdate);
         FormateurMatiere testFormateurMatiere = formateurMatiereList.get(formateurMatiereList.size() - 1);
         assertThat(testFormateurMatiere.getNiveau()).isEqualTo(UPDATED_NIVEAU);
@@ -193,7 +193,7 @@ public class FormateurMatiereResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingFormateurMatiere() throws Exception {
-        int databaseSizeBeforeUpdate = formateurMatiereRepository.findAll().size();
+        int databaseSizeBeforeUpdate = formateurMatiereService.findAll().size();
 
         // Create the FormateurMatiere
 
@@ -204,7 +204,7 @@ public class FormateurMatiereResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the FormateurMatiere in the database
-        List<FormateurMatiere> formateurMatiereList = formateurMatiereRepository.findAll();
+        List<FormateurMatiere> formateurMatiereList = formateurMatiereService.findAll();
         assertThat(formateurMatiereList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -212,9 +212,9 @@ public class FormateurMatiereResourceIntTest {
     @Transactional
     public void deleteFormateurMatiere() throws Exception {
         // Initialize the database
-        formateurMatiereRepository.saveAndFlush(formateurMatiere);
+        formateurMatiereService.saveAndFlush(formateurMatiere);
 
-        int databaseSizeBeforeDelete = formateurMatiereRepository.findAll().size();
+        int databaseSizeBeforeDelete = formateurMatiereService.findAll().size();
 
         // Get the formateurMatiere
         restFormateurMatiereMockMvc.perform(delete("/api/formateur-matieres/{id}", formateurMatiere.getId())
@@ -222,7 +222,7 @@ public class FormateurMatiereResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<FormateurMatiere> formateurMatiereList = formateurMatiereRepository.findAll();
+        List<FormateurMatiere> formateurMatiereList = formateurMatiereService.findAll();
         assertThat(formateurMatiereList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
