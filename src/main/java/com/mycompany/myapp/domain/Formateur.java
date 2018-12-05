@@ -50,7 +50,7 @@ public class Formateur implements Serializable {
     @Column(name = "e_mail")
     private String eMail;
 
-    @OneToMany(mappedBy = "formateur")
+    @OneToMany(mappedBy = "formateur", cascade = CascadeType.REMOVE)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<FormateurMatiere> formateurMatieres = new HashSet<>();
     @OneToMany(mappedBy = "formateur")

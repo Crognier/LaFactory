@@ -2,7 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.mycompany.myapp.domain.FormateurMatiere;
-import com.mycompany.myapp.repository.FormateurMatiereRepository;
+import com.mycompany.myapp.service.FormateurMatiereService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -28,10 +28,10 @@ public class FormateurMatiereResource {
 
     private static final String ENTITY_NAME = "formateurMatiere";
 
-    private final FormateurMatiereRepository formateurMatiereRepository;
+    private final FormateurMatiereService formateurMatiereService;
 
-    public FormateurMatiereResource(FormateurMatiereRepository formateurMatiereRepository) {
-        this.formateurMatiereRepository = formateurMatiereRepository;
+    public FormateurMatiereResource(FormateurMatiereService formateurMatiereService) {
+        this.formateurMatiereService = formateurMatiereService;
     }
 
     /**
@@ -48,7 +48,7 @@ public class FormateurMatiereResource {
         if (formateurMatiere.getId() != null) {
             throw new BadRequestAlertException("A new formateurMatiere cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        FormateurMatiere result = formateurMatiereRepository.save(formateurMatiere);
+        FormateurMatiere result = formateurMatiereService.save(formateurMatiere);
         return ResponseEntity.created(new URI("/api/formateur-matieres/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +70,7 @@ public class FormateurMatiereResource {
         if (formateurMatiere.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        FormateurMatiere result = formateurMatiereRepository.save(formateurMatiere);
+        FormateurMatiere result = formateurMatiereService.save(formateurMatiere);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, formateurMatiere.getId().toString()))
             .body(result);
@@ -85,7 +85,7 @@ public class FormateurMatiereResource {
     @Timed
     public List<FormateurMatiere> getAllFormateurMatieres() {
         log.debug("REST request to get all FormateurMatieres");
-        return formateurMatiereRepository.findAll();
+        return formateurMatiereService.findAll();
     }
 
     /**
@@ -98,7 +98,7 @@ public class FormateurMatiereResource {
     @Timed
     public ResponseEntity<FormateurMatiere> getFormateurMatiere(@PathVariable Long id) {
         log.debug("REST request to get FormateurMatiere : {}", id);
-        Optional<FormateurMatiere> formateurMatiere = formateurMatiereRepository.findById(id);
+        Optional<FormateurMatiere> formateurMatiere = formateurMatiereService.findById(id);
         return ResponseUtil.wrapOrNotFound(formateurMatiere);
     }
 
@@ -113,7 +113,7 @@ public class FormateurMatiereResource {
     public ResponseEntity<Void> deleteFormateurMatiere(@PathVariable Long id) {
         log.debug("REST request to delete FormateurMatiere : {}", id);
 
-        formateurMatiereRepository.deleteById(id);
+        formateurMatiereService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

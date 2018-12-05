@@ -141,7 +141,7 @@ public class CursusResourceIntTest {
     @Transactional
     public void getAllCursuses() throws Exception {
         // Initialize the database
-    	cursusService.saveAndFlush(cursus);
+        cursusService.saveAndFlush(cursus);
 
         // Get all the cursusList
         restCursusMockMvc.perform(get("/api/cursuses?sort=id,desc"))
@@ -156,7 +156,7 @@ public class CursusResourceIntTest {
     @Transactional
     public void getCursus() throws Exception {
         // Initialize the database
-    	cursusService.saveAndFlush(cursus);
+        cursusRepository.saveAndFlush(cursus);
 
         // Get the cursus
         restCursusMockMvc.perform(get("/api/cursuses/{id}", cursus.getId()))
@@ -179,7 +179,7 @@ public class CursusResourceIntTest {
     @Transactional
     public void updateCursus() throws Exception {
         // Initialize the database
-    	cursusService.saveAndFlush(cursus);
+        cursusRepository.saveAndFlush(cursus);
 
         int databaseSizeBeforeUpdate = cursusService.findAll().size();
 
@@ -226,7 +226,7 @@ public class CursusResourceIntTest {
     @Transactional
     public void deleteCursus() throws Exception {
         // Initialize the database
-    	cursusService.saveAndFlush(cursus);
+        cursusRepository.saveAndFlush(cursus);
 
         int databaseSizeBeforeDelete = cursusService.findAll().size();
 

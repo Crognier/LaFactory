@@ -3,7 +3,7 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.LaFactoryApp;
 
 import com.mycompany.myapp.domain.Indisponibilite;
-import com.mycompany.myapp.repository.IndisponibiliteRepository;
+import com.mycompany.myapp.service.IndisponibiliteService;
 import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -48,7 +48,7 @@ public class IndisponibiliteResourceIntTest {
     private static final Integer UPDATED_DUREE = 2;
 
     @Autowired
-    private IndisponibiliteRepository indisponibiliteRepository;
+    private IndisponibiliteService indisponibiliteService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -69,7 +69,7 @@ public class IndisponibiliteResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final IndisponibiliteResource indisponibiliteResource = new IndisponibiliteResource(indisponibiliteRepository);
+        final IndisponibiliteResource indisponibiliteResource = new IndisponibiliteResource(indisponibiliteService);
         this.restIndisponibiliteMockMvc = MockMvcBuilders.standaloneSetup(indisponibiliteResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -98,7 +98,7 @@ public class IndisponibiliteResourceIntTest {
     @Test
     @Transactional
     public void createIndisponibilite() throws Exception {
-        int databaseSizeBeforeCreate = indisponibiliteRepository.findAll().size();
+        int databaseSizeBeforeCreate = indisponibiliteService.findAll().size();
 
         // Create the Indisponibilite
         restIndisponibiliteMockMvc.perform(post("/api/indisponibilites")
@@ -107,7 +107,7 @@ public class IndisponibiliteResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the Indisponibilite in the database
-        List<Indisponibilite> indisponibiliteList = indisponibiliteRepository.findAll();
+        List<Indisponibilite> indisponibiliteList = indisponibiliteService.findAll();
         assertThat(indisponibiliteList).hasSize(databaseSizeBeforeCreate + 1);
         Indisponibilite testIndisponibilite = indisponibiliteList.get(indisponibiliteList.size() - 1);
         assertThat(testIndisponibilite.getDateDebut()).isEqualTo(DEFAULT_DATE_DEBUT);
@@ -117,7 +117,7 @@ public class IndisponibiliteResourceIntTest {
     @Test
     @Transactional
     public void createIndisponibiliteWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = indisponibiliteRepository.findAll().size();
+        int databaseSizeBeforeCreate = indisponibiliteService.findAll().size();
 
         // Create the Indisponibilite with an existing ID
         indisponibilite.setId(1L);
@@ -129,7 +129,7 @@ public class IndisponibiliteResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Indisponibilite in the database
-        List<Indisponibilite> indisponibiliteList = indisponibiliteRepository.findAll();
+        List<Indisponibilite> indisponibiliteList = indisponibiliteService.findAll();
         assertThat(indisponibiliteList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -137,7 +137,7 @@ public class IndisponibiliteResourceIntTest {
     @Transactional
     public void getAllIndisponibilites() throws Exception {
         // Initialize the database
-        indisponibiliteRepository.saveAndFlush(indisponibilite);
+        indisponibiliteService.saveAndFlush(indisponibilite);
 
         // Get all the indisponibiliteList
         restIndisponibiliteMockMvc.perform(get("/api/indisponibilites?sort=id,desc"))
@@ -152,7 +152,7 @@ public class IndisponibiliteResourceIntTest {
     @Transactional
     public void getIndisponibilite() throws Exception {
         // Initialize the database
-        indisponibiliteRepository.saveAndFlush(indisponibilite);
+        indisponibiliteService.saveAndFlush(indisponibilite);
 
         // Get the indisponibilite
         restIndisponibiliteMockMvc.perform(get("/api/indisponibilites/{id}", indisponibilite.getId()))
@@ -175,12 +175,12 @@ public class IndisponibiliteResourceIntTest {
     @Transactional
     public void updateIndisponibilite() throws Exception {
         // Initialize the database
-        indisponibiliteRepository.saveAndFlush(indisponibilite);
+        indisponibiliteService.saveAndFlush(indisponibilite);
 
-        int databaseSizeBeforeUpdate = indisponibiliteRepository.findAll().size();
+        int databaseSizeBeforeUpdate = indisponibiliteService.findAll().size();
 
         // Update the indisponibilite
-        Indisponibilite updatedIndisponibilite = indisponibiliteRepository.findById(indisponibilite.getId()).get();
+        Indisponibilite updatedIndisponibilite = indisponibiliteService.findById(indisponibilite.getId()).get();
         // Disconnect from session so that the updates on updatedIndisponibilite are not directly saved in db
         em.detach(updatedIndisponibilite);
         updatedIndisponibilite
@@ -193,7 +193,7 @@ public class IndisponibiliteResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the Indisponibilite in the database
-        List<Indisponibilite> indisponibiliteList = indisponibiliteRepository.findAll();
+        List<Indisponibilite> indisponibiliteList = indisponibiliteService.findAll();
         assertThat(indisponibiliteList).hasSize(databaseSizeBeforeUpdate);
         Indisponibilite testIndisponibilite = indisponibiliteList.get(indisponibiliteList.size() - 1);
         assertThat(testIndisponibilite.getDateDebut()).isEqualTo(UPDATED_DATE_DEBUT);
@@ -203,7 +203,7 @@ public class IndisponibiliteResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingIndisponibilite() throws Exception {
-        int databaseSizeBeforeUpdate = indisponibiliteRepository.findAll().size();
+        int databaseSizeBeforeUpdate = indisponibiliteService.findAll().size();
 
         // Create the Indisponibilite
 
@@ -214,7 +214,7 @@ public class IndisponibiliteResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Indisponibilite in the database
-        List<Indisponibilite> indisponibiliteList = indisponibiliteRepository.findAll();
+        List<Indisponibilite> indisponibiliteList = indisponibiliteService.findAll();
         assertThat(indisponibiliteList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -222,9 +222,9 @@ public class IndisponibiliteResourceIntTest {
     @Transactional
     public void deleteIndisponibilite() throws Exception {
         // Initialize the database
-        indisponibiliteRepository.saveAndFlush(indisponibilite);
+        indisponibiliteService.saveAndFlush(indisponibilite);
 
-        int databaseSizeBeforeDelete = indisponibiliteRepository.findAll().size();
+        int databaseSizeBeforeDelete = indisponibiliteService.findAll().size();
 
         // Get the indisponibilite
         restIndisponibiliteMockMvc.perform(delete("/api/indisponibilites/{id}", indisponibilite.getId())
@@ -232,7 +232,7 @@ public class IndisponibiliteResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Indisponibilite> indisponibiliteList = indisponibiliteRepository.findAll();
+        List<Indisponibilite> indisponibiliteList = indisponibiliteService.findAll();
         assertThat(indisponibiliteList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
