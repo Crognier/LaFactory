@@ -1,21 +1,29 @@
 package com.mycompany.myapp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.mycompany.myapp.domain.Ordinateur;
-import com.mycompany.myapp.repository.OrdinateurRepository;
-import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-import com.mycompany.myapp.web.rest.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.codahale.metrics.annotation.Timed;
+import com.mycompany.myapp.domain.Ordinateur;
+import com.mycompany.myapp.service.OrdinateurService;
+import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import com.mycompany.myapp.web.rest.util.HeaderUtil;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing Ordinateur.
@@ -28,10 +36,10 @@ public class OrdinateurResource {
 
     private static final String ENTITY_NAME = "ordinateur";
 
-    private final OrdinateurRepository ordinateurRepository;
+    private final OrdinateurService ordinateurService;
 
-    public OrdinateurResource(OrdinateurRepository ordinateurRepository) {
-        this.ordinateurRepository = ordinateurRepository;
+    public OrdinateurResource(OrdinateurService ordinateurService) {
+        this.ordinateurService = ordinateurService;
     }
 
     /**
@@ -48,7 +56,7 @@ public class OrdinateurResource {
         if (ordinateur.getId() != null) {
             throw new BadRequestAlertException("A new ordinateur cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Ordinateur result = ordinateurRepository.save(ordinateur);
+        Ordinateur result = ordinateurService.save(ordinateur);
         return ResponseEntity.created(new URI("/api/ordinateurs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +78,7 @@ public class OrdinateurResource {
         if (ordinateur.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Ordinateur result = ordinateurRepository.save(ordinateur);
+        Ordinateur result = ordinateurService.save(ordinateur);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ordinateur.getId().toString()))
             .body(result);
@@ -85,7 +93,7 @@ public class OrdinateurResource {
     @Timed
     public List<Ordinateur> getAllOrdinateurs() {
         log.debug("REST request to get all Ordinateurs");
-        return ordinateurRepository.findAll();
+        return ordinateurService.findAll();
     }
 
     /**
@@ -98,7 +106,7 @@ public class OrdinateurResource {
     @Timed
     public ResponseEntity<Ordinateur> getOrdinateur(@PathVariable Long id) {
         log.debug("REST request to get Ordinateur : {}", id);
-        Optional<Ordinateur> ordinateur = ordinateurRepository.findById(id);
+        Optional<Ordinateur> ordinateur = ordinateurService.findById(id);
         return ResponseUtil.wrapOrNotFound(ordinateur);
     }
 
@@ -113,7 +121,7 @@ public class OrdinateurResource {
     public ResponseEntity<Void> deleteOrdinateur(@PathVariable Long id) {
         log.debug("REST request to delete Ordinateur : {}", id);
 
-        ordinateurRepository.deleteById(id);
+        ordinateurService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }
