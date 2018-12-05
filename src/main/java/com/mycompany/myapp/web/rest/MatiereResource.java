@@ -2,7 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.mycompany.myapp.domain.Matiere;
-import com.mycompany.myapp.repository.MatiereRepository;
+import com.mycompany.myapp.service.MatiereService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -28,10 +28,10 @@ public class MatiereResource {
 
     private static final String ENTITY_NAME = "matiere";
 
-    private final MatiereRepository matiereRepository;
+    private final MatiereService matiereService;
 
-    public MatiereResource(MatiereRepository matiereRepository) {
-        this.matiereRepository = matiereRepository;
+    public MatiereResource(MatiereService matiereService) {
+        this.matiereService = matiereService;
     }
 
     /**
@@ -48,7 +48,7 @@ public class MatiereResource {
         if (matiere.getId() != null) {
             throw new BadRequestAlertException("A new matiere cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Matiere result = matiereRepository.save(matiere);
+        Matiere result = matiereService.save(matiere);
         return ResponseEntity.created(new URI("/api/matieres/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +70,7 @@ public class MatiereResource {
         if (matiere.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Matiere result = matiereRepository.save(matiere);
+        Matiere result = matiereService.save(matiere);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, matiere.getId().toString()))
             .body(result);
@@ -85,7 +85,7 @@ public class MatiereResource {
     @Timed
     public List<Matiere> getAllMatieres() {
         log.debug("REST request to get all Matieres");
-        return matiereRepository.findAll();
+        return matiereService.findAll();
     }
 
     /**
@@ -98,7 +98,7 @@ public class MatiereResource {
     @Timed
     public ResponseEntity<Matiere> getMatiere(@PathVariable Long id) {
         log.debug("REST request to get Matiere : {}", id);
-        Optional<Matiere> matiere = matiereRepository.findById(id);
+        Optional<Matiere> matiere = matiereService.findById(id);
         return ResponseUtil.wrapOrNotFound(matiere);
     }
 
@@ -113,7 +113,7 @@ public class MatiereResource {
     public ResponseEntity<Void> deleteMatiere(@PathVariable Long id) {
         log.debug("REST request to delete Matiere : {}", id);
 
-        matiereRepository.deleteById(id);
+        matiereService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

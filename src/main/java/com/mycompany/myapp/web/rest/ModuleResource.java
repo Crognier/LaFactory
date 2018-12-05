@@ -2,7 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.mycompany.myapp.domain.Module;
-import com.mycompany.myapp.repository.ModuleRepository;
+import com.mycompany.myapp.service.ModuleService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -28,10 +28,10 @@ public class ModuleResource {
 
     private static final String ENTITY_NAME = "module";
 
-    private final ModuleRepository moduleRepository;
+    private final ModuleService moduleService;
 
-    public ModuleResource(ModuleRepository moduleRepository) {
-        this.moduleRepository = moduleRepository;
+    public ModuleResource(ModuleService moduleService) {
+        this.moduleService = moduleService;
     }
 
     /**
@@ -48,7 +48,7 @@ public class ModuleResource {
         if (module.getId() != null) {
             throw new BadRequestAlertException("A new module cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Module result = moduleRepository.save(module);
+        Module result = moduleService.save(module);
         return ResponseEntity.created(new URI("/api/modules/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +70,7 @@ public class ModuleResource {
         if (module.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Module result = moduleRepository.save(module);
+        Module result = moduleService.save(module);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, module.getId().toString()))
             .body(result);
@@ -85,7 +85,7 @@ public class ModuleResource {
     @Timed
     public List<Module> getAllModules() {
         log.debug("REST request to get all Modules");
-        return moduleRepository.findAll();
+        return moduleService.findAll();
     }
 
     /**
@@ -98,7 +98,7 @@ public class ModuleResource {
     @Timed
     public ResponseEntity<Module> getModule(@PathVariable Long id) {
         log.debug("REST request to get Module : {}", id);
-        Optional<Module> module = moduleRepository.findById(id);
+        Optional<Module> module = moduleService.findById(id);
         return ResponseUtil.wrapOrNotFound(module);
     }
 
@@ -113,7 +113,7 @@ public class ModuleResource {
     public ResponseEntity<Void> deleteModule(@PathVariable Long id) {
         log.debug("REST request to delete Module : {}", id);
 
-        moduleRepository.deleteById(id);
+        moduleService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

@@ -2,7 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.mycompany.myapp.domain.Indisponibilite;
-import com.mycompany.myapp.repository.IndisponibiliteRepository;
+import com.mycompany.myapp.service.IndisponibiliteService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -28,10 +28,10 @@ public class IndisponibiliteResource {
 
     private static final String ENTITY_NAME = "indisponibilite";
 
-    private final IndisponibiliteRepository indisponibiliteRepository;
+    private final IndisponibiliteService indisponibiliteService;
 
-    public IndisponibiliteResource(IndisponibiliteRepository indisponibiliteRepository) {
-        this.indisponibiliteRepository = indisponibiliteRepository;
+    public IndisponibiliteResource(IndisponibiliteService indisponibiliteService) {
+        this.indisponibiliteService = indisponibiliteService;
     }
 
     /**
@@ -48,7 +48,7 @@ public class IndisponibiliteResource {
         if (indisponibilite.getId() != null) {
             throw new BadRequestAlertException("A new indisponibilite cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Indisponibilite result = indisponibiliteRepository.save(indisponibilite);
+        Indisponibilite result = indisponibiliteService.save(indisponibilite);
         return ResponseEntity.created(new URI("/api/indisponibilites/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +70,7 @@ public class IndisponibiliteResource {
         if (indisponibilite.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Indisponibilite result = indisponibiliteRepository.save(indisponibilite);
+        Indisponibilite result = indisponibiliteService.save(indisponibilite);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, indisponibilite.getId().toString()))
             .body(result);
@@ -85,7 +85,7 @@ public class IndisponibiliteResource {
     @Timed
     public List<Indisponibilite> getAllIndisponibilites() {
         log.debug("REST request to get all Indisponibilites");
-        return indisponibiliteRepository.findAll();
+        return indisponibiliteService.findAll();
     }
 
     /**
@@ -98,7 +98,7 @@ public class IndisponibiliteResource {
     @Timed
     public ResponseEntity<Indisponibilite> getIndisponibilite(@PathVariable Long id) {
         log.debug("REST request to get Indisponibilite : {}", id);
-        Optional<Indisponibilite> indisponibilite = indisponibiliteRepository.findById(id);
+        Optional<Indisponibilite> indisponibilite = indisponibiliteService.findById(id);
         return ResponseUtil.wrapOrNotFound(indisponibilite);
     }
 
@@ -113,7 +113,7 @@ public class IndisponibiliteResource {
     public ResponseEntity<Void> deleteIndisponibilite(@PathVariable Long id) {
         log.debug("REST request to delete Indisponibilite : {}", id);
 
-        indisponibiliteRepository.deleteById(id);
+        indisponibiliteService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

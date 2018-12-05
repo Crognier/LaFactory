@@ -2,7 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.mycompany.myapp.domain.Formateur;
-import com.mycompany.myapp.repository.FormateurRepository;
+import com.mycompany.myapp.service.FormateurService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -28,10 +28,10 @@ public class FormateurResource {
 
     private static final String ENTITY_NAME = "formateur";
 
-    private final FormateurRepository formateurRepository;
+    private final FormateurService formateurService;
 
-    public FormateurResource(FormateurRepository formateurRepository) {
-        this.formateurRepository = formateurRepository;
+    public FormateurResource(FormateurService formateurService) {
+        this.formateurService = formateurService;
     }
 
     /**
@@ -48,7 +48,7 @@ public class FormateurResource {
         if (formateur.getId() != null) {
             throw new BadRequestAlertException("A new formateur cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Formateur result = formateurRepository.save(formateur);
+        Formateur result = formateurService.save(formateur);
         return ResponseEntity.created(new URI("/api/formateurs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +70,7 @@ public class FormateurResource {
         if (formateur.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Formateur result = formateurRepository.save(formateur);
+        Formateur result = formateurService.save(formateur);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, formateur.getId().toString()))
             .body(result);
@@ -85,7 +85,7 @@ public class FormateurResource {
     @Timed
     public List<Formateur> getAllFormateurs() {
         log.debug("REST request to get all Formateurs");
-        return formateurRepository.findAll();
+        return formateurService.findAll();
     }
 
     /**
@@ -98,7 +98,7 @@ public class FormateurResource {
     @Timed
     public ResponseEntity<Formateur> getFormateur(@PathVariable Long id) {
         log.debug("REST request to get Formateur : {}", id);
-        Optional<Formateur> formateur = formateurRepository.findById(id);
+        Optional<Formateur> formateur = formateurService.findById(id);
         return ResponseUtil.wrapOrNotFound(formateur);
     }
 
@@ -113,7 +113,7 @@ public class FormateurResource {
     public ResponseEntity<Void> deleteFormateur(@PathVariable Long id) {
         log.debug("REST request to delete Formateur : {}", id);
 
-        formateurRepository.deleteById(id);
+        formateurService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

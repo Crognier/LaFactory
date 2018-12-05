@@ -3,7 +3,7 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.LaFactoryApp;
 
 import com.mycompany.myapp.domain.Matiere;
-import com.mycompany.myapp.repository.MatiereRepository;
+import com.mycompany.myapp.service.MatiereService;
 import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -52,7 +52,7 @@ public class MatiereResourceIntTest {
     private static final String UPDATED_CONTENU = "BBBBBBBBBB";
 
     @Autowired
-    private MatiereRepository matiereRepository;
+    private MatiereService matiereService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -73,7 +73,7 @@ public class MatiereResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MatiereResource matiereResource = new MatiereResource(matiereRepository);
+        final MatiereResource matiereResource = new MatiereResource(matiereService);
         this.restMatiereMockMvc = MockMvcBuilders.standaloneSetup(matiereResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -104,7 +104,7 @@ public class MatiereResourceIntTest {
     @Test
     @Transactional
     public void createMatiere() throws Exception {
-        int databaseSizeBeforeCreate = matiereRepository.findAll().size();
+        int databaseSizeBeforeCreate = matiereService.findAll().size();
 
         // Create the Matiere
         restMatiereMockMvc.perform(post("/api/matieres")
@@ -113,7 +113,7 @@ public class MatiereResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the Matiere in the database
-        List<Matiere> matiereList = matiereRepository.findAll();
+        List<Matiere> matiereList = matiereService.findAll();
         assertThat(matiereList).hasSize(databaseSizeBeforeCreate + 1);
         Matiere testMatiere = matiereList.get(matiereList.size() - 1);
         assertThat(testMatiere.getTitre()).isEqualTo(DEFAULT_TITRE);
@@ -125,7 +125,7 @@ public class MatiereResourceIntTest {
     @Test
     @Transactional
     public void createMatiereWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = matiereRepository.findAll().size();
+        int databaseSizeBeforeCreate = matiereService.findAll().size();
 
         // Create the Matiere with an existing ID
         matiere.setId(1L);
@@ -137,7 +137,7 @@ public class MatiereResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Matiere in the database
-        List<Matiere> matiereList = matiereRepository.findAll();
+        List<Matiere> matiereList = matiereService.findAll();
         assertThat(matiereList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -145,7 +145,7 @@ public class MatiereResourceIntTest {
     @Transactional
     public void getAllMatieres() throws Exception {
         // Initialize the database
-        matiereRepository.saveAndFlush(matiere);
+        matiereService.saveAndFlush(matiere);
 
         // Get all the matiereList
         restMatiereMockMvc.perform(get("/api/matieres?sort=id,desc"))
@@ -162,7 +162,7 @@ public class MatiereResourceIntTest {
     @Transactional
     public void getMatiere() throws Exception {
         // Initialize the database
-        matiereRepository.saveAndFlush(matiere);
+        matiereService.saveAndFlush(matiere);
 
         // Get the matiere
         restMatiereMockMvc.perform(get("/api/matieres/{id}", matiere.getId()))
@@ -187,12 +187,12 @@ public class MatiereResourceIntTest {
     @Transactional
     public void updateMatiere() throws Exception {
         // Initialize the database
-        matiereRepository.saveAndFlush(matiere);
+        matiereService.saveAndFlush(matiere);
 
-        int databaseSizeBeforeUpdate = matiereRepository.findAll().size();
+        int databaseSizeBeforeUpdate = matiereService.findAll().size();
 
         // Update the matiere
-        Matiere updatedMatiere = matiereRepository.findById(matiere.getId()).get();
+        Matiere updatedMatiere = matiereService.findById(matiere.getId()).get();
         // Disconnect from session so that the updates on updatedMatiere are not directly saved in db
         em.detach(updatedMatiere);
         updatedMatiere
@@ -207,7 +207,7 @@ public class MatiereResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the Matiere in the database
-        List<Matiere> matiereList = matiereRepository.findAll();
+        List<Matiere> matiereList = matiereService.findAll();
         assertThat(matiereList).hasSize(databaseSizeBeforeUpdate);
         Matiere testMatiere = matiereList.get(matiereList.size() - 1);
         assertThat(testMatiere.getTitre()).isEqualTo(UPDATED_TITRE);
@@ -219,7 +219,7 @@ public class MatiereResourceIntTest {
     @Test
     @Transactional
     public void updateNonExistingMatiere() throws Exception {
-        int databaseSizeBeforeUpdate = matiereRepository.findAll().size();
+        int databaseSizeBeforeUpdate = matiereService.findAll().size();
 
         // Create the Matiere
 
@@ -230,7 +230,7 @@ public class MatiereResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the Matiere in the database
-        List<Matiere> matiereList = matiereRepository.findAll();
+        List<Matiere> matiereList = matiereService.findAll();
         assertThat(matiereList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -238,9 +238,9 @@ public class MatiereResourceIntTest {
     @Transactional
     public void deleteMatiere() throws Exception {
         // Initialize the database
-        matiereRepository.saveAndFlush(matiere);
+        matiereService.saveAndFlush(matiere);
 
-        int databaseSizeBeforeDelete = matiereRepository.findAll().size();
+        int databaseSizeBeforeDelete = matiereService.findAll().size();
 
         // Get the matiere
         restMatiereMockMvc.perform(delete("/api/matieres/{id}", matiere.getId())
@@ -248,7 +248,7 @@ public class MatiereResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Matiere> matiereList = matiereRepository.findAll();
+        List<Matiere> matiereList = matiereService.findAll();
         assertThat(matiereList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
