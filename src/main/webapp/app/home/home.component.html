@@ -4,22 +4,25 @@
     </div>
     <div class="col-md-9">
         <h1 class="display-4">Bienvenue sur le gestionnaire de planning !</h1>
-        <p class="lead">Merci de vous authentifier</p>
+
+        <div *ngIf!="isAuthenticate()">
+            <p class="lead">Merci de vous authentifier</p>
+        </div>
 
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
                 <span id="home-logged-message" *ngIf="account">
-                	Bienvenue {{account.firstName}} !<br> 
+                	Bienvenue {{account.firstName}} !<br>
                    Vous êtes enregistré en tant que "{{account.login}}". </span>
             </div>
 
-            
+
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span>Vous n'avez pas de compte ?</span>&nbsp;
-                <a class="alert-link" routerLink="register">Enregistrez-vous !</a>
+                <a class="alert-link" routerLink="register">Enregistrez-vous! </a>
             </div>
         </div>
 
-     
+
     </div>
 </div>
