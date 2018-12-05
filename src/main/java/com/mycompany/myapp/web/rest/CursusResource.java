@@ -1,21 +1,29 @@
 package com.mycompany.myapp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.mycompany.myapp.domain.Cursus;
-import com.mycompany.myapp.repository.CursusRepository;
-import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-import com.mycompany.myapp.web.rest.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.codahale.metrics.annotation.Timed;
+import com.mycompany.myapp.domain.Cursus;
+import com.mycompany.myapp.service.CursusService;
+import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import com.mycompany.myapp.web.rest.util.HeaderUtil;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing Cursus.
@@ -28,10 +36,10 @@ public class CursusResource {
 
     private static final String ENTITY_NAME = "cursus";
 
-    private final CursusRepository cursusRepository;
+    private final CursusService cursusService;
 
-    public CursusResource(CursusRepository cursusRepository) {
-        this.cursusRepository = cursusRepository;
+    public CursusResource(CursusService cursusService) {
+        this.cursusService = cursusService;
     }
 
     /**
@@ -48,7 +56,7 @@ public class CursusResource {
         if (cursus.getId() != null) {
             throw new BadRequestAlertException("A new cursus cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Cursus result = cursusRepository.save(cursus);
+        Cursus result = cursusService.save(cursus);
         return ResponseEntity.created(new URI("/api/cursuses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +78,7 @@ public class CursusResource {
         if (cursus.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Cursus result = cursusRepository.save(cursus);
+        Cursus result = cursusService.save(cursus);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, cursus.getId().toString()))
             .body(result);
@@ -85,7 +93,7 @@ public class CursusResource {
     @Timed
     public List<Cursus> getAllCursuses() {
         log.debug("REST request to get all Cursuses");
-        return cursusRepository.findAll();
+        return cursusService.findAll();
     }
 
     /**
@@ -98,7 +106,7 @@ public class CursusResource {
     @Timed
     public ResponseEntity<Cursus> getCursus(@PathVariable Long id) {
         log.debug("REST request to get Cursus : {}", id);
-        Optional<Cursus> cursus = cursusRepository.findById(id);
+        Optional<Cursus> cursus = cursusService.findById(id);
         return ResponseUtil.wrapOrNotFound(cursus);
     }
 
@@ -113,7 +121,7 @@ public class CursusResource {
     public ResponseEntity<Void> deleteCursus(@PathVariable Long id) {
         log.debug("REST request to delete Cursus : {}", id);
 
-        cursusRepository.deleteById(id);
+        cursusService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }
