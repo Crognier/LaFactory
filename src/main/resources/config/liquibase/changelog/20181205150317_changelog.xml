@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="ajc (generated)" id="1544022205842-1">
+        <addColumn tableName="formateur">
+            <column name="user_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ajc (generated)" id="1544022205842-2">
+        <addColumn tableName="gestionnaire">
+            <column name="user_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ajc (generated)" id="1544022205842-3">
+        <addColumn tableName="technicien">
+            <column name="user_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ajc (generated)" id="1544022205842-4">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="formateur" constraintName="FK6qty2ueg0btoux7e75sfmt7nb" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="ajc (generated)" id="1544022205842-5">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="gestionnaire" constraintName="FKnaempdc9bft9kotck78j9x3y5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="ajc (generated)" id="1544022205842-6">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="technicien" constraintName="FKqsrrc770wcmpkfo96cows5ki6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="ajc (generated)" id="1544022205842-7">
+        <dropTable tableName="jhi_date_time_wrapper"/>
+    </changeSet>
+</databaseChangeLog>
