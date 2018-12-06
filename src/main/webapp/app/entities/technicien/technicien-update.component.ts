@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 
 import { ITechnicien } from 'app/shared/model/technicien.model';
 import { TechnicienService } from './technicien.service';
+import { IUser, UserService } from 'app/core';
+import { JhiAlertService } from 'ng-jhipster';
 
 @Component({
     selector: 'jhi-technicien-update',
@@ -14,13 +16,26 @@ export class TechnicienUpdateComponent implements OnInit {
     technicien: ITechnicien;
     isSaving: boolean;
 
-    constructor(private technicienService: TechnicienService, private activatedRoute: ActivatedRoute) {}
+    users: IUser[];
+
+    constructor(
+        private jhiAlertService: JhiAlertService,
+        private technicienService: TechnicienService,
+        private activatedRoute: ActivatedRoute,
+        private userService: UserService
+    ) {}
 
     ngOnInit() {
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({ technicien }) => {
             this.technicien = technicien;
         });
+        this.userService.query().subscribe(
+            (res: HttpResponse<IUser[]>) => {
+                this.users = res.body;
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
     }
 
     previousState() {
@@ -47,5 +62,13 @@ export class TechnicienUpdateComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
+    }
+
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
+    }
+
+    trackUserById(index: number, item: IUser) {
+        return item.id;
     }
 }
