@@ -1,3 +1,5 @@
+import { IUser } from 'app/core';
+
 export interface ITechnicien {
     id?: number;
     nom?: string;
@@ -8,6 +10,7 @@ export interface ITechnicien {
     ville?: string;
     numeroTelephone?: number;
     eMail?: string;
+    user?: IUser;
 }
 
 export class Technicien implements ITechnicien {
@@ -20,6 +23,7 @@ export class Technicien implements ITechnicien {
         public codePostal?: number,
         public ville?: string,
         public numeroTelephone?: number,
-        public eMail?: string
+        public eMail?: string,
+        public user?: IUser
     ) {}
 }
