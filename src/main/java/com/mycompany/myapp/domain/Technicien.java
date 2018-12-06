@@ -46,6 +46,10 @@ public class Technicien implements Serializable {
 
     @Column(name = "e_mail")
     private String eMail;
+    
+    @OneToOne
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -158,6 +162,19 @@ public class Technicien implements Serializable {
 
     public void seteMail(String eMail) {
         this.eMail = eMail;
+    }
+    
+    public User getUser() {
+        return user;
+    }
+
+    public Technicien user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
