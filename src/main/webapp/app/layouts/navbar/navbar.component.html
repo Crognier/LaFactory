@@ -65,7 +65,7 @@
                             <span>Technicien</span>
                         </a>
                     </li>
-                    <li *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_GESTIONNAIRE','ROLE_FORMATEUR']">
+                    <li *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_GESTIONNAIRE']">
                         <a class="dropdown-item" routerLink="formateur" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
                             <span>Formateur</span>
