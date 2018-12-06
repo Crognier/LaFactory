@@ -72,22 +72,12 @@ public class Cursus implements Serializable {
 		return duree;
 	}
 
-	public Cursus duree() {
-		Integer duree = 0;
-		Iterator<Module> iterator = this.modules.iterator();
-		while (iterator.hasNext()) {
-			duree += iterator.next().getDuree();
-		}
+	public Cursus duree(Integer duree) {
 		this.duree = duree;
 		return this;
 	}
 
-	public void setDuree() {
-		Integer duree = 0;
-		Iterator<Module> iterator = this.modules.iterator();
-		while (iterator.hasNext()) {
-			duree += iterator.next().getDuree();
-		}
+	public void setDuree(Integer duree) {
 		this.duree = duree;
 	}
 

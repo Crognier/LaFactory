@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { ICursus } from 'app/shared/model/cursus.model';
+import { Cursus, ICursus } from 'app/shared/model/cursus.model';
 import { Principal } from 'app/core';
 import { CursusService } from './cursus.service';
 
@@ -21,7 +21,8 @@ export class CursusComponent implements OnInit, OnDestroy {
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private principal: Principal
-    ) {}
+    ) {
+    }
 
     loadAll() {
         this.cursusService.query().subscribe(
@@ -34,6 +35,7 @@ export class CursusComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadAll();
+
         this.principal.identity().then(account => {
             this.currentAccount = account;
         });
