@@ -37,6 +37,12 @@
                 <dd>
                     <span>{{technicien.eMail}}</span>
                 </dd>
+                <dt><span>User</span></dt>
+                <dd>
+                    <div *ngIf="technicien.user">
+                        <a [routerLink]="['/user', technicien.user?.id, 'view']">{{technicien.user?.login}}</a>
+                    </div>
+                </dd>
             </dl>
 
             <button type="submit"

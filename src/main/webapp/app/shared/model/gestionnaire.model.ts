@@ -1,4 +1,5 @@
 import { ICursus } from 'app/shared/model//cursus.model';
+import { IUser } from 'app/core';
 
 export interface IGestionnaire {
     id?: number;
@@ -11,6 +12,7 @@ export interface IGestionnaire {
     numeroTelephone?: number;
     eMail?: string;
     cursuses?: ICursus[];
+    user?: IUser;
 }
 
 export class Gestionnaire implements IGestionnaire {
@@ -24,6 +26,7 @@ export class Gestionnaire implements IGestionnaire {
         public ville?: string,
         public numeroTelephone?: number,
         public eMail?: string,
-        public cursuses?: ICursus[]
+        public cursuses?: ICursus[],
+        public user?: IUser
     ) {}
 }

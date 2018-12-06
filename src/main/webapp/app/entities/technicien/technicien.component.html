@@ -1,9 +1,10 @@
 <div>
     <h2 id="page-heading">
         <span>Techniciens</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-technicien" [routerLink]="['/technicien/new']">
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-technicien"
+                [routerLink]="['/technicien/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
-            <span >
+            <span>
             Create new Technicien
             </span>
         </button>
@@ -14,16 +15,17 @@
         <table class="table table-striped">
             <thead>
             <tr>
-            <th><span>ID</span></th>
-            <th><span>Nom</span></th>
-            <th><span>Prenom</span></th>
-            <th><span>Numero</span></th>
-            <th><span>Rue</span></th>
-            <th><span>Code Postal</span></th>
-            <th><span>Ville</span></th>
-            <th><span>Numero Telephone</span></th>
-            <th><span>E Mail</span></th>
-            <th></th>
+                <th><span>ID</span></th>
+                <th><span>Nom</span></th>
+                <th><span>Prenom</span></th>
+                <th><span>Numero</span></th>
+                <th><span>Rue</span></th>
+                <th><span>Code Postal</span></th>
+                <th><span>Ville</span></th>
+                <th><span>Numero Telephone</span></th>
+                <th><span>E Mail</span></th>
+                <th><span>User</span></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -37,6 +39,7 @@
                 <td>{{technicien.ville}}</td>
                 <td>{{technicien.numeroTelephone}}</td>
                 <td>{{technicien.eMail}}</td>
+                <td>{{technicien.user.id}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
