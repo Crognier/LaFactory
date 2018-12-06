@@ -47,11 +47,12 @@ export class CursusUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+
         if (this.cursus.id !== undefined) {
             this.subscribeToSaveResponse(this.cursusService.update(this.cursus));
-        } else {
+            } else {
             this.subscribeToSaveResponse(this.cursusService.create(this.cursus));
-        }
+            }
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<ICursus>>) {

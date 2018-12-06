@@ -13,6 +13,7 @@ export class CursusDetailComponent implements OnInit {
     constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
+
         this.activatedRoute.data.subscribe(({ cursus }) => {
             this.cursus = cursus;
         });
