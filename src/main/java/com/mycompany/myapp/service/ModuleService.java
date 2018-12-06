@@ -13,15 +13,19 @@ import com.mycompany.myapp.repository.ModuleRepository;
 public class ModuleService {
 
 	private final ModuleRepository moduleRepository;
-	private CursusService cursusService;
+	
+	private final CursusService cursusService;
 	private CursusRepository cursusRepository;
 
-	public ModuleService(ModuleRepository moduleRepository) {
+	public ModuleService(ModuleRepository moduleRepository, CursusService cursusService) {
 		this.moduleRepository = moduleRepository;
+		this.cursusService = cursusService;
 	}
 
 	public Module save(Module module) {
-
+		System.out.println(module.getCursus());
+		System.out.println(cursusService);
+		cursusService.save(module.getCursus());
 		return moduleRepository.save(module);
 	}
 

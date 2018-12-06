@@ -20,11 +20,11 @@ public class CursusService {
 	}
 
 	public Cursus save(Cursus cursus) {
-		return cursusRepository.save(calculerDuree(cursus));
+		return cursusRepository.save(cursus);
 	}
 
 	public Cursus saveAndFlush(Cursus cursus) {
-		return cursusRepository.saveAndFlush(calculerDuree(cursus));
+		return cursusRepository.saveAndFlush(cursus);
 	}
 
 	public List<Cursus> findAll() {
@@ -41,30 +41,26 @@ public class CursusService {
 	}
 
 	public Optional<Cursus> findByIdWithModules(Long id) {
-		System.out.println(cursusRepository.findByIdWithModules(id).get().getGestionnaire().getNom());
-		System.out.println(cursusRepository.findByIdWithModules(id).get().getDuree());
-		System.out.println(cursusRepository.findByIdWithModules(id).get().getModules());
-		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		return cursusRepository.findByIdWithModules(id);
+		Optional<Cursus> cursusOptional = cursusRepository.findByIdWithModules(id);
+		cursusOptional.get().setDuree(calculerDuree(cursusOptional.get()));
+		return cursusOptional;
 	}
 
-	public Cursus calculerDuree(Cursus cursus) {
-		Integer duree = 0;
-		if (findByIdWithModules(cursus.getId()).isPresent()) {
-			Cursus nouveauCursus = findByIdWithModules(cursus.getId()).get();
-			Iterator<Module> iterator = nouveauCursus.getModules().iterator();
-			while (iterator.hasNext()) {
-				duree += iterator.next().getDuree();
-			}
-			nouveauCursus.setDuree(duree);
-			return nouveauCursus;
+	public List<Cursus> findAllWithModules() {
+		List<Cursus> cursuses = cursusRepository.findAllWithModules();
+		for (Cursus cursus : cursuses) {
+			cursus.setDuree(calculerDuree(cursus));
 		}
+		return cursuses;
+	}
+
+	public Integer calculerDuree(Cursus cursus) {
+		Integer duree = 0;
 		Iterator<Module> iterator = cursus.getModules().iterator();
 		while (iterator.hasNext()) {
 			duree += iterator.next().getDuree();
 		}
-		cursus.setDuree(duree);
-		return cursus;
+		return duree;
 	}
 
 }

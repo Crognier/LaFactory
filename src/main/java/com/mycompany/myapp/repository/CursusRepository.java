@@ -5,6 +5,7 @@ import com.mycompany.myapp.domain.Module;
 
 import io.swagger.models.Model;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.*;
@@ -21,5 +22,9 @@ public interface CursusRepository extends JpaRepository<Cursus, Long> {
 	
 	@Query("select c from Cursus c left join fetch c.modules where c.id=:id")
 	Optional<Cursus> findByIdWithModules(@Param("id") Long id);
+	
+	@Query("select distinct c from Cursus c left join fetch c.modules")
+	List<Cursus> findAllWithModules();
+	
 	
 }
