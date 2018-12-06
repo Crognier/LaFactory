@@ -193,6 +193,19 @@ public class Gestionnaire implements Serializable {
 
     public void setCursuses(Set<Cursus> cursuses) {
         this.cursuses = cursuses;
+    } 
+   
+    public User getUser() {
+        return user;
+    }
+
+    public Gestionnaire user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
