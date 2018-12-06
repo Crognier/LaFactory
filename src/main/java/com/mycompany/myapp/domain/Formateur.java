@@ -251,6 +251,19 @@ public class Formateur implements Serializable {
     public void setIndisponibilites(Set<Indisponibilite> indisponibilites) {
         this.indisponibilites = indisponibilites;
     }
+    
+    public User getUser() {
+        return user;
+    }
+
+    public Formateur user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
