@@ -7,7 +7,6 @@ import { IFormateur } from 'app/shared/model/formateur.model';
 import { FormateurService } from './formateur.service';
 import { IUser, UserService } from 'app/core';
 import { JhiAlertService } from 'ng-jhipster';
-import { IGestionnaire } from 'app/shared/model/gestionnaire.model';
 
 @Component({
     selector: 'jhi-formateur-update',
