@@ -33,7 +33,7 @@ export const formateurRoute: Routes = [
         path: 'formateur',
         component: FormateurComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_GESTIONNAIRE', 'ROLE_USER'],
             pageTitle: 'Formateurs'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const formateurRoute: Routes = [
             formateur: FormateurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Formateurs'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const formateurRoute: Routes = [
             formateur: FormateurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Formateurs'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const formateurRoute: Routes = [
             formateur: FormateurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Formateurs'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const formateurPopupRoute: Routes = [
             formateur: FormateurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Formateurs'
         },
         canActivate: [UserRouteAccessService],

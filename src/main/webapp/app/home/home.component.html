@@ -3,11 +3,8 @@
         <span class="hipster img-fluid rounded"></span>
     </div>
     <div class="col-md-9">
-        <h1 class="display-4">Bienvenue sur le gestionnaire de planning !</h1>
+        <h1 class="display-4">Bienvenue sur le gestionnaire de planning !</h1><br><br>
 
-        <div *ngIf!="isAuthenticate()">
-            <p class="lead">Merci de vous authentifier</p>
-        </div>
 
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
@@ -19,24 +16,10 @@
 
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span>Vous n'avez pas de compte ?</span>&nbsp;
-                <a class="alert-link" routerLink="register">Enregistrez-vous! </a>
+                <a class="alert-link" routerLink="register"> Enregistrez-vous! </a><br>
+                <span>Sinon : <a class="alert-link" (click)="login()">Identifiez-vous ! </a></span>
             </div>
         </div>
-
-<<<<<<< HEAD
-=======
-        <p>
-            If you have any question on app:
-        </p>
-
-        <ul>
-            <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener">JHipster homepage</a></li>
-            <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener">JHipster on Stack Overflow</a></li>
-            <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener">JHipster bug tracker</a></li>
-            <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener">JHipster public chat room</a></li>
-            <li><a href="https://twitter.com/java_hipster" target="_blank" rel="noopener">follow @java_hipster on Twitter</a></li>
-        </ul>
->>>>>>> master
 
     </div>
 </div>
