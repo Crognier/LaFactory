@@ -49,6 +49,10 @@ public class Gestionnaire implements Serializable {
 
     @Column(name = "e_mail")
     private String eMail;
+    
+    @OneToOne
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private User user;
 
     @OneToMany(mappedBy = "gestionnaire")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)

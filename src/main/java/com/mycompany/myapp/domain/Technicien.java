@@ -46,6 +46,10 @@ public class Technicien implements Serializable {
 
     @Column(name = "e_mail")
     private String eMail;
+    
+    @OneToOne
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
