@@ -1,37 +1,52 @@
-<div class="row justify-content-center">
-    <div class="col-8">
-        <div *ngIf="cursus">
-            <h2><span>Cursus</span> {{cursus.id}}</h2>
-            <hr>
-            <jhi-alert-error></jhi-alert-error>
-            <dl class="row-md jh-entity-details">
-                <dt><span>Date Debut</span></dt>
-                <dd>
-                    <span>{{cursus.dateDebut}}</span>
-                </dd>
-                <dt><span>Duree</span></dt>
-                <dd>
-                    <span>{{cursus.duree}}</span>
-                </dd>
-                <dt><span>Gestionnaire</span></dt>
-                <dd>
-                    <div *ngIf="cursus.gestionnaire">
-                        <a [routerLink]="['/gestionnaire', cursus.gestionnaire?.id, 'view']">{{cursus.gestionnaire?.nom}}</a>
-                    </div>
-                </dd>
-            </dl>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div *ngIf="cursus">
+                <h2><span>Cursus</span> {{cursus.id}}</h2>
+                <hr>
+                <jhi-alert-error></jhi-alert-error>
+                <dl class="row-md jh-entity-details">
+                    <dt><span>Date Debut</span></dt>
+                    <dd>
+                        <span>{{cursus.dateDebut}}</span>
+                    </dd>
+                    <dt><span>Duree</span></dt>
+                    <dd>
+                        <table class="table ">
+                            <tr *ngFor="let module of cursus.modules">
+                                <td> cursus de {{cursus.duree}} jours</td>
+                            </tr>
+                        </table>
+                    </dd>
+                    <dt><span>Gestionnaire</span></dt>
+                    <dd>
+                        <div *ngIf="cursus.gestionnaire">
+                            <a [routerLink]="['/gestionnaire', cursus.gestionnaire?.id, 'view']">{{cursus.gestionnaire?.nom}}</a>
+                        </div>
+                    </dd>
+                    <dt><span>Modules</span></dt>
+                    <dd>
+                        <table class="table ">
+                            <tr *ngFor="let module of cursus.modules">
+                                <td> module de {{module.matiere.titre}}, enseigne par {{module.formateur.nom}}</td>
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
-                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
-            </button>
+                            </tr>
+                        </table>
+                    </dd>
+                </dl>
 
-            <button type="button"
-                    [routerLink]="['/cursus', cursus.id, 'edit']"
-                    class="btn btn-primary">
-                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
-            </button>
+                <button type="submit"
+                        (click)="previousState()"
+                        class="btn btn-info">
+                    <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+                </button>
+
+                <button type="button"
+                        [routerLink]="['/cursus', cursus.id, 'edit']"
+                        class="btn btn-primary">
+                    <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
