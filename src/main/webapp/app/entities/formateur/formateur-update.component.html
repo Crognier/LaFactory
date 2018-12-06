@@ -49,6 +49,13 @@
                     <input type="text" class="form-control" name="eMail" id="field_eMail"
                         [(ngModel)]="formateur.eMail" />
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_user">User</label>
+                    <select class="form-control" id="field_user" name="user" [(ngModel)]="formateur.user" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id === formateur.user?.id ? formateur.user : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                    </select>
+                </div>
 
             </div>
             <div>
