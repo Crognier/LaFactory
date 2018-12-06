@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
-
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import * as $ from 'jquery';
 import { LoginModalService, Principal, Account } from 'app/core';
+import { CursusService } from 'app/entities/cursus';
+import { HomeService } from 'app/home/home.service';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { ICursus } from 'app/shared/model/cursus.model';
 
 @Component({
     selector: 'jhi-home',
@@ -12,13 +16,29 @@ import { LoginModalService, Principal, Account } from 'app/core';
 export class HomeComponent implements OnInit {
     account: Account;
     modalRef: NgbModalRef;
+    cursuses: ICursus[];
 
-    constructor(private principal: Principal, private loginModalService: LoginModalService, private eventManager: JhiEventManager) {}
+    constructor(
+        private homeService: HomeService,
+        private loginModalService: LoginModalService,
+        private jhiAlertService: JhiAlertService,
+        private eventManager: JhiEventManager,
+        private principal: Principal
+    ) {}
+    public setCalendar = function(cursus) {
+        console.log(cursus);
+    };
 
     ngOnInit() {
         this.principal.identity().then(account => {
             this.account = account;
         });
+        this.homeService.query().subscribe(
+            (res: HttpResponse<ICursus[]>) => {
+                this.cursuses = res.body;
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
         this.registerAuthenticationSuccess();
     }
 
@@ -33,8 +53,16 @@ export class HomeComponent implements OnInit {
     isAuthenticated() {
         return this.principal.isAuthenticated();
     }
-
+    /* $('#calendar').fullCalendar({
+            defaultDate: '2014-09-12',
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+        });*/
     login() {
         this.modalRef = this.loginModalService.open();
+    }
+
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 }
