@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
-import * as $ from 'jquery';
 import { LoginModalService, Principal, Account } from 'app/core';
 import { CursusService } from 'app/entities/cursus';
 import { HomeService } from 'app/home/home.service';
@@ -53,11 +52,6 @@ export class HomeComponent implements OnInit {
     isAuthenticated() {
         return this.principal.isAuthenticated();
     }
-    /* $('#calendar').fullCalendar({
-            defaultDate: '2014-09-12',
-            editable: true,
-            eventLimit: true, // allow "more" link when too many events
-        });*/
     login() {
         this.modalRef = this.loginModalService.open();
     }
