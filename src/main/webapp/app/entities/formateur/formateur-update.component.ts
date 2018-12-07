@@ -45,7 +45,7 @@ export class FormateurUpdateComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.formateur.id !== undefined) {
-            console.log(this.formateur.user)
+            console.log(this.formateur);
             this.subscribeToSaveResponse(this.formateurService.update(this.formateur));
         } else {
             this.subscribeToSaveResponse(this.formateurService.create(this.formateur));

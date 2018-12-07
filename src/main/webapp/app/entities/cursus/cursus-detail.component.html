@@ -10,14 +10,19 @@
                     <dd>
                         <span>{{cursus.dateDebut}}</span>
                     </dd>
+
+
                     <dt><span>Duree</span></dt>
-                    <dd>
-                        <table class="table ">
-                            <tr *ngFor="let module of cursus.modules">
-                                <td> cursus de {{cursus.duree}} jours</td>
-                            </tr>
-                        </table>
-                    </dd>
+
+
+                    <dd><span>cursus de {{cursus.duree}} jours</span></dd>
+
+                    <dt><span>Duree Calendar</span></dt>
+                    <dd><span>cursus de {{dureeCalendar}} jours</span></dd>
+
+                    <dt><span>Date de fin du cursus</span></dt>
+                    <dd><span>Fin du cursus le {{dateDeFin}}</span></dd>
+
                     <dt><span>Gestionnaire</span></dt>
                     <dd>
                         <div *ngIf="cursus.gestionnaire">
@@ -49,4 +54,30 @@
             </div>
         </div>
     </div>
+    <table>
+        <tr>
+            <th>Mois</th>
+            <th colspan="2">Date</th>
+            <th>Module</th>
+            <th>Formateur</th>
+            <th>Titres</th>
+        </tr>
+
+        <tr *ngFor="let date of listDate">
+            <th scope="row">Janvier{{date}}</th>
+            <!--<td>Jeudi jour{{date_affichage | date: 'EEEE'}}</td>
+            <td>19 date{{date_affichage | date: 'dd'}}</td>
+            <td>Java Module</td>
+            <td>olivier</td>
+            <td>JavaEE</td>-->
+
+
+        </tr>
+    </table>
+    <style>
+        table, th, td {
+            border: 0.5px solid black;
+        }
+    </style>
+
 </div>
