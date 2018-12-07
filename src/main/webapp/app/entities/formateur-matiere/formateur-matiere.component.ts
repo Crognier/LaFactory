@@ -4,8 +4,9 @@ import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { IFormateurMatiere } from 'app/shared/model/formateur-matiere.model';
-import { Principal } from 'app/core';
+import { AccountService, Principal } from 'app/core';
 import { FormateurMatiereService } from './formateur-matiere.service';
+import { log } from 'util';
 
 @Component({
     selector: 'jhi-formateur-matiere',
@@ -20,7 +21,8 @@ export class FormateurMatiereComponent implements OnInit, OnDestroy {
         private formateurMatiereService: FormateurMatiereService,
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
-        private principal: Principal
+        private principal: Principal,
+        private login: string
     ) {}
 
     loadAll() {
@@ -42,6 +44,10 @@ export class FormateurMatiereComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
+    }
+
+    isFormateur() {
+        return this.principal.hasAuthority('ROLE_FORMATEUR');
     }
 
     trackId(index: number, item: IFormateurMatiere) {
