@@ -25,14 +25,8 @@
         <p>
             If you have any question on app:
         </p>
-    <h1>Mon calendrier </h1>
-        <button *ngFor="let cursus of cursuses ;trackBy: trackId" (click)="setCalendar(cursus)">
-            <a [routerLink]="['/cursus', cursus.id, 'view' ]">{{cursus.id}}</a>
-            {{cursus.dateDebut | date:'mediumDate'}}
-            {{cursus.duree}}
-        </button>
 
-        {{message}}
+
     </div>
 </div>
 

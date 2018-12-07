@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit {
     public setCalendar = function(cursus) {
         console.log(cursus);
     };
-
     ngOnInit() {
         this.principal.identity().then(account => {
             this.account = account;

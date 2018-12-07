@@ -6,20 +6,33 @@ import { Module } from 'app/shared/model/module.model';
 import { Moment } from 'moment';
 import moment = require('moment');
 
+import moment = require('moment');
+import { Moment } from 'moment';
+
 @Component({
     selector: 'jhi-cursus-detail',
     templateUrl: './cursus-detail.component.html'
 })
 export class CursusDetailComponent implements OnInit {
     cursus: ICursus;
+    listDate: Array<Moment> = new Array<Moment>();
     dateModuleMap = new Map<Date, Module>();
 
     constructor(
         private activatedRoute: ActivatedRoute) {
     }
 
-    ngOnInit() {
+    public IncrementerCalendar = function(nbredejour: number, date: Moment) {
+        let i: number;
+        this.listDate.push(date.format('YYYY-MM-DD'));
+        for (i = 0; i < nbredejour - 1; i++) {
+            this.listDate.push(date.add(1, 'd').format('YYYY-MM-DD'));
+        }
+        console.log(this.listDate);
+        return this.listDate;
+    };
 
+    ngOnInit() {
         this.activatedRoute.data.subscribe(({ cursus }) => {
             this.cursus = cursus;
         });
@@ -40,6 +53,7 @@ export class CursusDetailComponent implements OnInit {
             return a.dateDebut < b.dateDebut ? -1 : a.dateDebut > b.dateDebut ? 1 : 0;
         });
         this.createMapModules();
+        this.IncrementerCalendar(this.cursus.duree, moment(this.cursus.dateDebut));
     }
 
     previousState() {
