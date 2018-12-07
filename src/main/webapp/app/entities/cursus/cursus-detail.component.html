@@ -10,14 +10,15 @@
                     <dd>
                         <span>{{cursus.dateDebut}}</span>
                     </dd>
+
+
                     <dt><span>Duree</span></dt>
-                    <dd>
-                        <table class="table ">
-                            <tr *ngFor="let module of cursus.modules">
-                                <td> cursus de {{cursus.duree}} jours</td>
-                            </tr>
-                        </table>
-                    </dd>
+
+
+                    <dd><span>cursus de {{cursus.duree}} jours</span></dd>
+
+                    <dt><span>DureeCalendar</span></dt>
+                    <dd><span>cursus de {{calculerDureeCalendar(cursus)}} jours</span></dd>
                     <dt><span>Gestionnaire</span></dt>
                     <dd>
                         <div *ngIf="cursus.gestionnaire">
