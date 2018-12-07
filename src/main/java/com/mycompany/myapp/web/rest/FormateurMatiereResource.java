@@ -101,6 +101,14 @@ public class FormateurMatiereResource {
         Optional<FormateurMatiere> formateurMatiere = formateurMatiereService.findById(id);
         return ResponseUtil.wrapOrNotFound(formateurMatiere);
     }
+    
+    @GetMapping("/formateur-matieres/formateur/{id}")
+    @Timed
+    public ResponseEntity<List<FormateurMatiere>> getFormateurMatiereByFormateurId(@PathVariable Long id) {
+        log.debug("REST request to get FormateurMatiere  By Formateur ID: {}", id);
+        Optional<List<FormateurMatiere>> formateurMatieres = formateurMatiereService.findByFormateurId(id);
+        return ResponseUtil.wrapOrNotFound(formateurMatieres);
+    }
 
     /**
      * DELETE  /formateur-matieres/:id : delete the "id" formateurMatiere.

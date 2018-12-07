@@ -33,7 +33,7 @@ export const stagiaireRoute: Routes = [
         path: 'stagiaire',
         component: StagiaireComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Stagiaires'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const stagiaireRoute: Routes = [
             stagiaire: StagiaireResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Stagiaires'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const stagiaireRoute: Routes = [
             stagiaire: StagiaireResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Stagiaires'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const stagiaireRoute: Routes = [
             stagiaire: StagiaireResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Stagiaires'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const stagiairePopupRoute: Routes = [
             stagiaire: StagiaireResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Stagiaires'
         },
         canActivate: [UserRouteAccessService],

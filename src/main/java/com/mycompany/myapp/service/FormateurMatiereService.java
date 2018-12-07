@@ -16,6 +16,7 @@ public class FormateurMatiereService {
 	public FormateurMatiereService(FormateurMatiereRepository formateurMatiereRepository) {
 		this.formateurMatiereRepository = formateurMatiereRepository;
 	}
+	
 
 	public FormateurMatiere save(FormateurMatiere formateurMatiere) {
 		return formateurMatiereRepository.save(formateurMatiere);
@@ -31,6 +32,10 @@ public class FormateurMatiereService {
 
 	public Optional<FormateurMatiere> findById(Long id) {
 		return formateurMatiereRepository.findById(id);
+	}
+	
+	public Optional<List<FormateurMatiere>> findByFormateurId(Long id){
+		return formateurMatiereRepository.findByFormateurId(id);
 	}
 
 	public void deleteById(Long id) {

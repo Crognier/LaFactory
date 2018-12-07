@@ -7,6 +7,8 @@ import { IFormateurMatiere } from 'app/shared/model/formateur-matiere.model';
 import { AccountService, Principal } from 'app/core';
 import { FormateurMatiereService } from './formateur-matiere.service';
 import { log } from 'util';
+import { FormateurService } from 'app/entities/formateur';
+import { IFormateur } from 'app/shared/model/formateur.model';
 
 @Component({
     selector: 'jhi-formateur-matiere',
@@ -16,13 +18,17 @@ export class FormateurMatiereComponent implements OnInit, OnDestroy {
     formateurMatieres: IFormateurMatiere[];
     currentAccount: any;
     eventSubscriber: Subscription;
+    private account: Account;
+    private formateur: IFormateur;
+    private id_account: number;
+    private formateurMatiere: IFormateurMatiere;
 
     constructor(
         private formateurMatiereService: FormateurMatiereService,
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private principal: Principal,
-        private login: string
+        private formateurService: FormateurService
     ) {}
 
     loadAll() {
@@ -34,11 +40,30 @@ export class FormateurMatiereComponent implements OnInit, OnDestroy {
         );
     }
 
+    loadSpecific() {
+        this.id_account = parseInt(this.account.id, 10);
+        this.formateurService.findByAccountId(this.id_account).subscribe(
+            (res: HttpResponse<IFormateur>) => {
+                this.formateur = res.body;
+                this.formateurMatiereService.findByFormateurId(this.formateur.id).subscribe((res2: HttpResponse<IFormateurMatiere[]>) => {
+                    this.formateurMatieres = res2.body;
+                });
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
+    }
+
     ngOnInit() {
-        this.loadAll();
         this.principal.identity().then(account => {
             this.currentAccount = account;
+            this.account = account;
+            if (account.authorities.includes('ROLE_FORMATEUR')) {
+                this.loadSpecific();
+            } else {
+                this.loadAll();
+            }
         });
+
         this.registerChangeInFormateurMatieres();
     }
 

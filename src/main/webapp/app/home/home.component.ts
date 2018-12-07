@@ -3,6 +3,8 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginModalService, Principal, Account } from 'app/core';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { IFormateur } from 'app/shared/model/formateur.model';
 
 @Component({
     selector: 'jhi-home',
@@ -11,15 +13,14 @@ import { LoginModalService, Principal, Account } from 'app/core';
 })
 export class HomeComponent implements OnInit {
     account: Account;
+    accountWithId: Account;
     modalRef: NgbModalRef;
-    log: string;
 
     constructor(private principal: Principal, private loginModalService: LoginModalService, private eventManager: JhiEventManager) {}
 
     ngOnInit() {
         this.principal.identity().then(account => {
             this.account = account;
-            this.log = this.account.login;
         });
         this.registerAuthenticationSuccess();
     }
