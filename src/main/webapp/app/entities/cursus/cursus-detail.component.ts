@@ -50,7 +50,8 @@ export class CursusDetailComponent implements OnInit {
     }
 
     createMapModules() {
-        for (let i = 0, let j = 0; i < this.dureeCalendar, i++) {
+        let j = 0;
+        for (let i = 0; i < this.dureeCalendar; i++) {
             console.log(this.listDate[i])
             if (this.listDate[i] === this.cursus.modules[j]) {
                 for ( let k = 0; k < this.cursus.modules[j].duree; k++) {
@@ -60,6 +61,7 @@ export class CursusDetailComponent implements OnInit {
                         this.dateModuleMap.set(this.listDate[i], this.cursus.modules[j]);
                     }
                 }
+                j++;
             }
         }
     }
