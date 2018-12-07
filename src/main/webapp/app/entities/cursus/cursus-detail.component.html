@@ -17,8 +17,12 @@
 
                     <dd><span>cursus de {{cursus.duree}} jours</span></dd>
 
-                    <dt><span>DureeCalendar</span></dt>
-                    <dd><span>cursus de {{calculerDureeCalendar(cursus)}} jours</span></dd>
+                    <dt><span>Duree Calendar</span></dt>
+                    <dd><span>cursus de {{dureeCalendar}} jours</span></dd>
+
+                    <dt><span>Date de fin du cursus</span></dt>
+                    <dd><span>Fin du cursus le {{dateDeFin}}</span></dd>
+
                     <dt><span>Gestionnaire</span></dt>
                     <dd>
                         <div *ngIf="cursus.gestionnaire">
