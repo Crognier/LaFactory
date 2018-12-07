@@ -16,7 +16,7 @@ import { Moment } from 'moment';
 export class CursusDetailComponent implements OnInit {
     cursus: ICursus;
     listDate: Array<Moment> = new Array<Moment>();
-    dateModuleMap = new Map<Date, Module>();
+    dateModuleMap = new Map<Moment, Module>();
 
     constructor(
         private activatedRoute: ActivatedRoute) {
@@ -28,8 +28,6 @@ export class CursusDetailComponent implements OnInit {
         for (i = 0; i < nbredejour - 1; i++) {
             this.listDate.push(date.add(1, 'd').format('YYYY-MM-DD'));
         }
-        console.log(this.listDate);
-        return this.listDate;
     };
 
     ngOnInit() {
@@ -37,42 +35,36 @@ export class CursusDetailComponent implements OnInit {
             this.cursus = cursus;
         });
         this.cursus.modules.sort((a: Module, b: Module) => {
-            /*   console.log(a);
-               console.log(a.dateDebut);
-               console.log(a.dateDebut > b.dateDebut);
-               console.log(moment(a.dateDebut).toDate());
-               console.log(moment(a.dateDebut).isoWeekday());
-               console.log(moment(a.dateDebut).toDate().setDate(moment(a.dateDebut).toDate().getDate() + 1));
-               console.log(moment(a.dateDebut).toDate().setDate(moment(a.dateDebut).toDate().getDate()));
-               console.log(moment(a.dateDebut).add(1, 'd'));
-               console.log(moment(a.dataaeDebut).add(1, 'd').format('YYYY-MM-DD'));
-               console.log(a.dateDebut.add(1, 'd'));
-               console.log('après ça bugge');
-               console.log(b);
-               console.log(b.dateDebut); */
             return a.dateDebut < b.dateDebut ? -1 : a.dateDebut > b.dateDebut ? 1 : 0;
         });
-        this.createMapModules();
         this.IncrementerCalendar(this.cursus.duree, moment(this.cursus.dateDebut));
+        this.createMapModules(this.cursus.dateDebut);
+        console.log(this.dateModuleMap);
     }
 
     previousState() {
         window.history.back();
     }
 
-    createMapModules() {
+    createMapModules(date: Moment) {
         let j = 0;
-        for (let i = 0; i < this.dureeCalendar; i++) {
-            console.log(this.listDate[i]);
-            if (this.listDate[i] === this.cursus.modules[j]) {
-                for (let k = 0; k < this.cursus.modules[j].duree; k++) {
-                    if (this.listDate[i].isoWeekday() in [6, 7]) {
-                        this.dateModuleMap.set(this.listDate[i], null);
+        for (let i = 0; i < this.cursus.duree;) {
+            if (date.format('YYYY-MM-DD') === moment(this.cursus.modules[j].dateDebut).format('YYYY-MM-DD')) {
+                for (let k = 0; k < this.cursus.modules[j].duree;) {
+                    if (moment(date).isoWeekday() === 6 || moment(date).isoWeekday() === 7) {
+                        this.dateModuleMap.set(moment(date), null);
+                        date.add(1, 'd');
                     } else {
-                        this.dateModuleMap.set(this.listDate[i], this.cursus.modules[j]);
+                        this.dateModuleMap.set(moment(date), this.cursus.modules[j]);
+                        k++;
+                        i++;
+                        date.add(1, 'd');
                     }
                 }
                 j++;
+            } else {
+                this.dateModuleMap.set(date, null);
+                date.add(1, 'd');
             }
         }
     }
