@@ -33,7 +33,7 @@ export const formateurMatiereRoute: Routes = [
         path: 'formateur-matiere',
         component: FormateurMatiereComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_FORMATEUR', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'FormateurMatieres'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const formateurMatiereRoute: Routes = [
             formateurMatiere: FormateurMatiereResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_FORMATEUR', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'FormateurMatieres'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const formateurMatiereRoute: Routes = [
             formateurMatiere: FormateurMatiereResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_FORMATEUR', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'FormateurMatieres'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const formateurMatiereRoute: Routes = [
             formateurMatiere: FormateurMatiereResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_FORMATEUR', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'FormateurMatieres'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const formateurMatierePopupRoute: Routes = [
             formateurMatiere: FormateurMatiereResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_FORMATEUR', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'FormateurMatieres'
         },
         canActivate: [UserRouteAccessService],

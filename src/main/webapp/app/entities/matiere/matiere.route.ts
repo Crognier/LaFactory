@@ -33,7 +33,7 @@ export const matiereRoute: Routes = [
         path: 'matiere',
         component: MatiereComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_FORMATEUR', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Matieres'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const matiereRoute: Routes = [
             matiere: MatiereResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_FORMATEUR', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Matieres'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const matiereRoute: Routes = [
             matiere: MatiereResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_FORMATEUR', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Matieres'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const matiereRoute: Routes = [
             matiere: MatiereResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_FORMATEUR', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Matieres'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const matierePopupRoute: Routes = [
             matiere: MatiereResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_FORMATEUR', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Matieres'
         },
         canActivate: [UserRouteAccessService],

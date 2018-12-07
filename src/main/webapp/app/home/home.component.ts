@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
@@ -12,12 +12,14 @@ import { LoginModalService, Principal, Account } from 'app/core';
 export class HomeComponent implements OnInit {
     account: Account;
     modalRef: NgbModalRef;
+    log: string;
 
     constructor(private principal: Principal, private loginModalService: LoginModalService, private eventManager: JhiEventManager) {}
 
     ngOnInit() {
         this.principal.identity().then(account => {
             this.account = account;
+            this.log = this.account.login;
         });
         this.registerAuthenticationSuccess();
     }

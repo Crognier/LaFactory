@@ -156,6 +156,7 @@ public class CursusResourceIntTest {
     @Transactional
     public void getCursus() throws Exception {
         // Initialize the database
+        cursusService.saveAndFlush(cursus);
     	cursusService.saveAndFlush(cursus);
 
         // Get the cursus
@@ -179,6 +180,7 @@ public class CursusResourceIntTest {
     @Transactional
     public void updateCursus() throws Exception {
         // Initialize the database
+        cursusService.saveAndFlush(cursus);
     	cursusService.saveAndFlush(cursus);
 
         int databaseSizeBeforeUpdate = cursusService.findAll().size();
@@ -226,6 +228,7 @@ public class CursusResourceIntTest {
     @Transactional
     public void deleteCursus() throws Exception {
         // Initialize the database
+        cursusService.saveAndFlush(cursus);
     	cursusService.saveAndFlush(cursus);
 
         int databaseSizeBeforeDelete = cursusService.findAll().size();

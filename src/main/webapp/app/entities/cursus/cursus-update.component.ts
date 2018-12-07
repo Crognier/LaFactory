@@ -68,6 +68,7 @@ export class CursusUpdateComponent implements OnInit {
     save() {
         console.log(this.cursus);
         this.isSaving = true;
+
         if (this.cursus.id !== undefined) {
             this.subscribeToSaveResponse(this.cursusService.update(this.cursus));
             this.cursus.modules.forEach(item => {
