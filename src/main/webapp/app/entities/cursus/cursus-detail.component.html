@@ -54,4 +54,30 @@
             </div>
         </div>
     </div>
+    <table>
+        <tr>
+            <th>Mois</th>
+            <th colspan="2">Date</th>
+            <th>Module</th>
+            <th>Formateur</th>
+            <th>Titres</th>
+        </tr>
+
+        <tr *ngFor="let date of listDate">
+            <th scope="row">Janvier{{date}}</th>
+            <!--<td>Jeudi jour{{date_affichage | date: 'EEEE'}}</td>
+            <td>19 date{{date_affichage | date: 'dd'}}</td>
+            <td>Java Module</td>
+            <td>olivier</td>
+            <td>JavaEE</td>-->
+
+
+        </tr>
+    </table>
+    <style>
+        table, th, td {
+            border: 0.5px solid black;
+        }
+    </style>
+
 </div>
