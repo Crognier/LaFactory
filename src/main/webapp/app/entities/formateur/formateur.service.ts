@@ -35,4 +35,8 @@ export class FormateurService {
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
+
+    findByAccountId(id: number): Observable<EntityResponseType> {
+        return this.http.get<IFormateur>(`${this.resourceUrl}/account/${id}`, { observe: 'response' });
+    }
 }

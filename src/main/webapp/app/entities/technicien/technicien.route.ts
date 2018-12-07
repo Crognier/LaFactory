@@ -33,7 +33,7 @@ export const technicienRoute: Routes = [
         path: 'technicien',
         component: TechnicienComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE', 'ROLE_TECHNICIEN'],
             pageTitle: 'Techniciens'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const technicienRoute: Routes = [
             technicien: TechnicienResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE', 'ROLE_TECHNICIEN'],
             pageTitle: 'Techniciens'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const technicienRoute: Routes = [
             technicien: TechnicienResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE', 'ROLE_TECHNICIEN'],
             pageTitle: 'Techniciens'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const technicienRoute: Routes = [
             technicien: TechnicienResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE', 'ROLE_TECHNICIEN'],
             pageTitle: 'Techniciens'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const technicienPopupRoute: Routes = [
             technicien: TechnicienResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE', 'ROLE_TECHNICIEN'],
             pageTitle: 'Techniciens'
         },
         canActivate: [UserRouteAccessService],
