@@ -9,12 +9,17 @@ import {
     CursusDeletePopupComponent,
     CursusDeleteDialogComponent,
     cursusRoute,
-    cursusPopupRoute
+    cursusPopupRoute,
+    CursusService
 } from './';
+import { GestionnaireService } from 'app/entities/gestionnaire';
+import { ModuleService } from 'app/entities/module';
+import { StagiaireService } from 'app/entities/stagiaire';
 
 const ENTITY_STATES = [...cursusRoute, ...cursusPopupRoute];
 
 @NgModule({
+    providers: [CursusService, GestionnaireService, ModuleService, StagiaireService],
     imports: [LaFactorySharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [CursusComponent, CursusDetailComponent, CursusUpdateComponent, CursusDeleteDialogComponent, CursusDeletePopupComponent],
     entryComponents: [CursusComponent, CursusUpdateComponent, CursusDeleteDialogComponent, CursusDeletePopupComponent],
