@@ -13,8 +13,8 @@ import {
     CursusService
 } from './';
 import { GestionnaireService } from 'app/entities/gestionnaire';
-import { StagiaireService } from 'app/entities/stagiaire';
 import { ModuleService } from 'app/entities/module';
+import { StagiaireService } from 'app/entities/stagiaire';
 
 const ENTITY_STATES = [...cursusRoute, ...cursusPopupRoute];
 

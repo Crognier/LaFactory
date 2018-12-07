@@ -95,21 +95,77 @@ export class CursusUpdateComponent implements OnInit {
         }
     }
 
+    saveModule(module: IModule) {
+        this.isSaving = true;
+        if (this.cursus.id !== undefined) {
+            console.log(module);
+            module.cursus = this.cursus;
+            this.subscribeToSaveResponseModule(this.moduleService.update(module));
+        }
+    }
+
+    unsaveModule(module: IModule) {
+        this.isSaving = true;
+        if (this.cursus.id !== undefined) {
+            console.log(module);
+            module.cursus = null;
+            this.subscribeToSaveResponseModule(this.moduleService.update(module));
+        }
+    }
+
+    saveStagiaire(stagiaire: IStagiaire) {
+        this.isSaving = true;
+        if (this.cursus.id !== undefined) {
+            console.log(stagiaire);
+            stagiaire.cursus = this.cursus;
+            this.subscribeToSaveResponseStagiaire(this.stagiaireService.update(stagiaire));
+        }
+    }
+
+    unsaveStagiaire(stagiaire: IStagiaire) {
+        this.isSaving = true;
+        if (this.cursus.id !== undefined) {
+            console.log(stagiaire);
+            stagiaire.cursus = null;
+            this.subscribeToSaveResponseStagiaire(this.stagiaireService.update(stagiaire));
+        }
+    }
+
+    toggleModule(module: IModule) {
+        if (module.cursus == null) {
+            document.getElementById('unsave-module').setAttribute('disabled', '');
+        } else {
+            document.getElementById('save-module').setAttribute('disabled', '');
+        }
+    }
+
+    toggleStagiaire(stagiaire: IStagiaire) {
+        if (stagiaire.cursus == null) {
+            document.getElementById('unsave-stagiaire').setAttribute('disabled', '');
+        } else {
+            document.getElementById('save-stagiaire').setAttribute('disabled', '');
+        }
+    }
+
     private subscribeToSaveResponse(result: Observable<HttpResponse<ICursus>>) {
         result.subscribe((res: HttpResponse<ICursus>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
     private subscribeToSaveResponseModule(result: Observable<HttpResponse<IModule>>) {
-        result.subscribe((res: HttpResponse<IModule>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+        result.subscribe((res: HttpResponse<IModule>) => this.onSaveSuccess2(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
     private subscribeToSaveResponseStagiaire(result: Observable<HttpResponse<IStagiaire>>) {
-        result.subscribe((res: HttpResponse<IStagiaire>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+        result.subscribe((res: HttpResponse<IStagiaire>) => this.onSaveSuccess2(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
     private onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
+    }
+
+    private onSaveSuccess2() {
+        this.isSaving = false;
     }
 
     private onSaveError() {
