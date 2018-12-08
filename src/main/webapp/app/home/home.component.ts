@@ -32,12 +32,6 @@ export class HomeComponent implements OnInit {
             this.account = account;
             this.log = this.account.login;
         });
-        this.homeService.query().subscribe(
-            (res: HttpResponse<ICursus[]>) => {
-                this.cursuses = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
         this.registerAuthenticationSuccess();
     }
 
