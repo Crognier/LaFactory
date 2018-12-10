@@ -14,6 +14,7 @@ import moment = require('moment');
 export class CursusDetailComponent implements OnInit {
     cursus: ICursus;
     dureeCalendar = 0;
+    dateDeDebut: String;
     dateDeFin: String;
     listDate: Array<Moment> = new Array<Moment>();
     dateModuleMap = new Map<Moment, Module>();
@@ -53,6 +54,7 @@ export class CursusDetailComponent implements OnInit {
             this.cursus = cursus;
         });
         this.calculerDureeCalendar(moment(this.cursus.dateDebut));
+        this.dateDeDebut = moment(this.cursus.dateDebut).format('YYYY-MM-DD')
         this.dateDeFin = moment(this.cursus.dateDebut)
             .add(this.dureeCalendar - 1, 'd')
             .format('YYYY-MM-DD');

@@ -41,13 +41,13 @@
                     <option *ngFor="let module of modules" [value]="module">{{module.id}}
                         <form name="editModule" role="form" novalidate>
                             <div>
-                                <button type="submit" id="save-module" (click)="saveModule(module)"
-                                        class="btn btn-primary" [disabled]="module.cursus !== null">
+                                <button type="button" id="save-module" (click)="saveModule(module)"
+                                        class="btn btn-primary" [disabled]="module.cursus.id !== cursus.id">
                                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Ajouter Module</span>
                                 </button>
 
-                                <button type="submit" id="unsave-module" (click)="unsaveModule(module)"
-                                        class="btn btn-primary" [disabled]="module.cursus == null">
+                                <button type="button" id="unsave-module" (click)="unsaveModule(module)"
+                                        class="btn btn-primary" [disabled]="module.cursus.id === cursus.id">
                                     <fa-icon [icon]="'ban'"></fa-icon>
                                     <span>Retirer Module</span>
                                 </button>
@@ -61,12 +61,12 @@
                         <form name="editStagiaire" role="form" novalidate>
                             <div>
                                 <button type="submit" id="save-stagiaire" (click)="saveStagiaire(stagiaire)"
-                                        class="btn btn-primary" [disabled]="stagiaire.cursus !== null">
+                                        class="btn btn-primary" [disabled]="stagiaire.cursus.id !== cursus.id">
                                     <fa-icon [icon]="'save'"></fa-icon>
                                     <span>Ajouter Stagiaire</span>
                                 </button>
                                 <button type="submit" id="unsave-stagiaire" (click)="unsaveStagiaire(stagiaire)"
-                                        class="btn btn-primary" [disabled]="stagiaire.cursus == null">
+                                        class="btn btn-primary" [disabled]="stagiaire.cursus.id === cursus.id">
                                     <fa-icon [icon]="'ban'"></fa-icon>
                                     <span>Retirer Stagiaire</span>
                                 </button>
