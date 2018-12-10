@@ -33,7 +33,7 @@ export const salleRoute: Routes = [
         path: 'salle',
         component: SalleComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_TECHNICIEN', 'ROLE_ADMIN'],
             pageTitle: 'Salles'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const salleRoute: Routes = [
             salle: SalleResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_TECHNICIEN', 'ROLE_ADMIN'],
             pageTitle: 'Salles'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const salleRoute: Routes = [
             salle: SalleResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_TECHNICIEN', 'ROLE_ADMIN'],
             pageTitle: 'Salles'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const salleRoute: Routes = [
             salle: SalleResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_TECHNICIEN', 'ROLE_ADMIN'],
             pageTitle: 'Salles'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const sallePopupRoute: Routes = [
             salle: SalleResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_TECHNICIEN', 'ROLE_ADMIN'],
             pageTitle: 'Salles'
         },
         canActivate: [UserRouteAccessService],

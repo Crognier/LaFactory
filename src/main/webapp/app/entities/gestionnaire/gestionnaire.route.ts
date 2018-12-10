@@ -33,7 +33,7 @@ export const gestionnaireRoute: Routes = [
         path: 'gestionnaire',
         component: GestionnaireComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Gestionnaires'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const gestionnaireRoute: Routes = [
             gestionnaire: GestionnaireResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Gestionnaires'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const gestionnaireRoute: Routes = [
             gestionnaire: GestionnaireResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Gestionnaires'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const gestionnaireRoute: Routes = [
             gestionnaire: GestionnaireResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Gestionnaires'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const gestionnairePopupRoute: Routes = [
             gestionnaire: GestionnaireResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Gestionnaires'
         },
         canActivate: [UserRouteAccessService],

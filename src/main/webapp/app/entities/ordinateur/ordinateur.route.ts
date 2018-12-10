@@ -33,7 +33,7 @@ export const ordinateurRoute: Routes = [
         path: 'ordinateur',
         component: OrdinateurComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_TECHNICIEN', 'ROLE_ADMIN'],
             pageTitle: 'Ordinateurs'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const ordinateurRoute: Routes = [
             ordinateur: OrdinateurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_TECHNICIEN', 'ROLE_ADMIN'],
             pageTitle: 'Ordinateurs'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const ordinateurRoute: Routes = [
             ordinateur: OrdinateurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_TECHNICIEN', 'ROLE_ADMIN'],
             pageTitle: 'Ordinateurs'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const ordinateurRoute: Routes = [
             ordinateur: OrdinateurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_TECHNICIEN', 'ROLE_ADMIN'],
             pageTitle: 'Ordinateurs'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const ordinateurPopupRoute: Routes = [
             ordinateur: OrdinateurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_TECHNICIEN', 'ROLE_ADMIN'],
             pageTitle: 'Ordinateurs'
         },
         canActivate: [UserRouteAccessService],

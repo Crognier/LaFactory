@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IFormateurMatiere } from 'app/shared/model/formateur-matiere.model';
+import { IFormateur } from 'app/shared/model/formateur.model';
 
 type EntityResponseType = HttpResponse<IFormateurMatiere>;
 type EntityArrayResponseType = HttpResponse<IFormateurMatiere[]>;
@@ -25,6 +26,11 @@ export class FormateurMatiereService {
 
     find(id: number): Observable<EntityResponseType> {
         return this.http.get<IFormateurMatiere>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    }
+
+    findByFormateurId(id: number): Observable<EntityArrayResponseType> {
+        const options = createRequestOption(id);
+        return this.http.get<IFormateurMatiere[]>(`${this.resourceUrl}/formateur/${id}`, { params: options, observe: 'response' });
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {

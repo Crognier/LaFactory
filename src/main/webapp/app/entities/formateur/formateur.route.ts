@@ -57,7 +57,7 @@ export const formateurRoute: Routes = [
             formateur: FormateurResolve
         },
         data: {
-            authorities: ['ROLE_GESTIONNAIRE', 'ROLE ADMIN'],
+            authorities: ['ROLE_GESTIONNAIRE', 'ROLE_ADMIN'],
             pageTitle: 'Formateurs'
         },
         canActivate: [UserRouteAccessService]
