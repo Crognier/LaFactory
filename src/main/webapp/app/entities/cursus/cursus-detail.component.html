@@ -54,30 +54,34 @@
             </div>
         </div>
     </div>
-    <table>
+
+</br>
+
+    <table class="table table-hover table-bordered" id="content" #content>
+        <thead class="thead-dark">
+
         <tr>
-            <th>Mois</th>
-            <th colspan="2">Date</th>
+            <th>Date</th>
             <th>Module</th>
             <th>Formateur</th>
-            <th>Titres</th>
+        </tr>
+        </thead>
+
+
+        <tr *ngFor="let modulemap of dateModuleMap | keyvalue">
+            <td scope="row">{{modulemap.key}}</td>
+            <td *ngIf="modulemap.value == null" style="background-color: #7e7b6d"> </td>
+            <td *ngIf="modulemap.value == null" style="background-color: #7e7b6d"> </td>
+            <td *ngIf="modulemap.value !== null"> {{modulemap.value.matiere.titre}}</td>
+            <td *ngIf="modulemap.value !== null"> {{modulemap.value.formateur.nom}}</td>
         </tr>
 
-        <tr *ngFor="let date of listDate">
-            <th scope="row">Janvier{{date}}</th>
-            <!--<td>Jeudi jour{{date_affichage | date: 'EEEE'}}</td>
-            <td>19 date{{date_affichage | date: 'dd'}}</td>
-            <td>Java Module</td>
-            <td>olivier</td>
-            <td>JavaEE</td>-->
 
-
-        </tr>
     </table>
-    <style>
-        table, th, td {
-            border: 0.5px solid black;
-        }
-    </style>
+
+    <button class="btn btn-primary" (click)="downloadPDF()">Generer en PDF</button>
+
+
+
 
 </div>
