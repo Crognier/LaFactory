@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as jsPDF from 'jspdf';
+// import * as jsPDF from 'jspdf';
 
 import { ICursus } from 'app/shared/model/cursus.model';
 import { Module } from 'app/shared/model/module.model';
@@ -17,7 +17,9 @@ export class CursusDetailComponent implements OnInit {
     dateDeFin: String;
     listDate: Array<Moment> = new Array<Moment>();
     dateModuleMap = new Map<Moment, Module>();
-    constructor(private activatedRoute: ActivatedRoute) {}
+
+    constructor(private activatedRoute: ActivatedRoute) {
+    }
 
     public IncrementerCalendar = function(nbredejour: number, date: Moment) {
         let i: number;
@@ -26,24 +28,25 @@ export class CursusDetailComponent implements OnInit {
             this.listDate.push(date.add(1, 'd').format('YYYY-MM-DD'));
         }
     };
-    @ViewChild('content')
-    content: ElementRef;
-    public downloadPDF() {
-        let doc = new jsPDF();
-        let specialElementHandlers = {
-            '#editor': function(element, renderer) {
-                return true;
-            }
-        };
-        let content = this.content.nativeElement;
 
-        doc.fromHTML(content.innerHTML, 15, 15, {
-            width: 190,
-            elementHandlers: specialElementHandlers
-        });
+    /*    @ViewChild('content')
+        content: ElementRef;
+        public downloadPDF() {
+            const doc = new jsPDF();
+            const specialElementHandlers = {
+                '#editor'(element, renderer) {
+                    return true;
+                }
+            };
+            const content = this.content.nativeElement;
 
-        doc.save('calendrier-lafactory.pdf');
-    }
+            doc.fromHTML(content.innerHTML, 15, 15, {
+                width: 190,
+                elementHandlers: specialElementHandlers
+            });
+
+            doc.save('calendrier-lafactory.pdf');
+        } */
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ cursus }) => {
@@ -66,7 +69,7 @@ export class CursusDetailComponent implements OnInit {
     }
 
     calculerDureeCalendar(date: Moment) {
-        for (let i = 0; i < this.cursus.duree; ) {
+        for (let i = 0; i < this.cursus.duree;) {
             this.dureeCalendar++;
             if (moment(date).isoWeekday() !== 6 && moment(date).isoWeekday() !== 7) {
                 i++;
@@ -77,8 +80,8 @@ export class CursusDetailComponent implements OnInit {
 
     createMapModules(date: Moment) {
         let j = 0;
-        for (let i = 0; i < this.cursus.duree; ) {
-            for (let k = 0; k < this.cursus.modules[j].duree; ) {
+        for (let i = 0; i < this.cursus.duree;) {
+            for (let k = 0; k < this.cursus.modules[j].duree;) {
                 if (moment(date).isoWeekday() === 6 || moment(date).isoWeekday() === 7) {
                     // @ts-ignore
                     this.dateModuleMap.set(moment(date).format('DD/MM/YYYY'), null);
