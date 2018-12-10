@@ -13,6 +13,8 @@ import moment = require('moment');
 })
 export class CursusDetailComponent implements OnInit {
     cursus: ICursus;
+    dureeCalendar = 0;
+    dateDeFin: String;
     listDate: Array<Moment> = new Array<Moment>();
     dateModuleMap = new Map<Moment, Module>();
     constructor(private activatedRoute: ActivatedRoute) {}
@@ -47,6 +49,10 @@ export class CursusDetailComponent implements OnInit {
         this.activatedRoute.data.subscribe(({ cursus }) => {
             this.cursus = cursus;
         });
+        this.calculerDureeCalendar(moment(this.cursus.dateDebut));
+        this.dateDeFin = moment(this.cursus.dateDebut)
+            .add(this.dureeCalendar - 1, 'd')
+            .format('YYYY-MM-DD');
         this.cursus.modules.sort((a: Module, b: Module) => {
             return a.dateDebut < b.dateDebut ? -1 : a.dateDebut > b.dateDebut ? 1 : 0;
         });
@@ -58,6 +64,17 @@ export class CursusDetailComponent implements OnInit {
     previousState() {
         window.history.back();
     }
+
+    calculerDureeCalendar(date: Moment) {
+        for (let i = 0; i < this.cursus.duree; ) {
+            this.dureeCalendar++;
+            if (moment(date).isoWeekday() !== 6 && moment(date).isoWeekday() !== 7) {
+                i++;
+            }
+            date.add(1, 'd');
+        }
+    }
+
     createMapModules(date: Moment) {
         let j = 0;
         for (let i = 0; i < this.cursus.duree; ) {

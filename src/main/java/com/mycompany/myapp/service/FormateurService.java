@@ -32,6 +32,20 @@ public class FormateurService {
 	public Optional<Formateur> findById(Long id) {
 		return formateurRepository.findById(id);
 	}
+	
+	public Optional<Formateur> findByAccountId(Long id) {
+		System.out.println("-------------------");
+		System.out.println("\n"
+				+ "\n"
+				+ "\n"
+				+ "\n"
+				+ "\n");
+		System.out.println("find by id Account repo");
+		System.out.println("-------------------");
+		System.out.println(formateurRepository.findByAccountId(id).get().toString());
+		System.out.println();
+		return formateurRepository.findByAccountId(id);
+	}
 
 	public void deleteById(Long id) {
 		formateurRepository.deleteById(id);

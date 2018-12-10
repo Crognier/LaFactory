@@ -33,7 +33,7 @@ export const moduleRoute: Routes = [
         path: 'module',
         component: ModuleComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Modules'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const moduleRoute: Routes = [
             module: ModuleResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Modules'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const moduleRoute: Routes = [
             module: ModuleResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Modules'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const moduleRoute: Routes = [
             module: ModuleResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Modules'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const modulePopupRoute: Routes = [
             module: ModuleResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE'],
             pageTitle: 'Modules'
         },
         canActivate: [UserRouteAccessService],

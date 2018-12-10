@@ -2,10 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { LoginModalService, Principal, Account } from 'app/core';
-import { CursusService } from 'app/entities/cursus';
-import { HomeService } from 'app/home/home.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { ICursus } from 'app/shared/model/cursus.model';
+import { IFormateur } from 'app/shared/model/formateur.model';
 
 @Component({
     selector: 'jhi-home',
@@ -14,8 +12,8 @@ import { ICursus } from 'app/shared/model/cursus.model';
 })
 export class HomeComponent implements OnInit {
     account: Account;
+    accountWithId: Account;
     modalRef: NgbModalRef;
-    log: string;
 
     constructor(
         private homeService: HomeService,
@@ -30,7 +28,6 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
         this.principal.identity().then(account => {
             this.account = account;
-            this.log = this.account.login;
         });
         this.registerAuthenticationSuccess();
     }

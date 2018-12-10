@@ -33,7 +33,7 @@ export const videoProjecteurRoute: Routes = [
         path: 'video-projecteur',
         component: VideoProjecteurComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE', 'ROLE_TECHNICIEN'],
             pageTitle: 'VideoProjecteurs'
         },
         canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const videoProjecteurRoute: Routes = [
             videoProjecteur: VideoProjecteurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE', 'ROLE_TECHNICIEN'],
             pageTitle: 'VideoProjecteurs'
         },
         canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const videoProjecteurRoute: Routes = [
             videoProjecteur: VideoProjecteurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE', 'ROLE_TECHNICIEN'],
             pageTitle: 'VideoProjecteurs'
         },
         canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const videoProjecteurRoute: Routes = [
             videoProjecteur: VideoProjecteurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE', 'ROLE_TECHNICIEN'],
             pageTitle: 'VideoProjecteurs'
         },
         canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const videoProjecteurPopupRoute: Routes = [
             videoProjecteur: VideoProjecteurResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_GESTIONNAIRE', 'ROLE_TECHNICIEN'],
             pageTitle: 'VideoProjecteurs'
         },
         canActivate: [UserRouteAccessService],

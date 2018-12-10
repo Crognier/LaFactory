@@ -3,6 +3,7 @@ package com.mycompany.myapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NamedQuery;
 
 import javax.persistence.*;
 
@@ -17,6 +18,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "formateur")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@NamedQuery(name="Formateur.findByAccountId", query="select distinct f from Formateur f left join fetch f.user u where u.id=:id")
 public class Formateur implements Serializable {
 
     private static final long serialVersionUID = 1L;
