@@ -15,6 +15,7 @@ export class CursusComponent implements OnInit, OnDestroy {
     cursuses: ICursus[];
     currentAccount: any;
     eventSubscriber: Subscription;
+    listDate: Array<Date> = new Array<Date>();
 
     constructor(
         private cursusService: CursusService,
@@ -22,7 +23,6 @@ export class CursusComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager,
         private principal: Principal
     ) {}
-
     loadAll() {
         this.cursusService.query().subscribe(
             (res: HttpResponse<ICursus[]>) => {

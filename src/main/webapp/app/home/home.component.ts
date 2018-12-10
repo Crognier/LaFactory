@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
-
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { LoginModalService, Principal, Account } from 'app/core';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { IFormateur } from 'app/shared/model/formateur.model';
@@ -16,8 +15,15 @@ export class HomeComponent implements OnInit {
     accountWithId: Account;
     modalRef: NgbModalRef;
 
-    constructor(private principal: Principal, private loginModalService: LoginModalService, private eventManager: JhiEventManager) {}
-
+    constructor(
+        private loginModalService: LoginModalService,
+        private jhiAlertService: JhiAlertService,
+        private eventManager: JhiEventManager,
+        private principal: Principal
+    ) {}
+    public setCalendar = function(cursus) {
+        console.log(cursus);
+    };
     ngOnInit() {
         this.principal.identity().then(account => {
             this.account = account;
@@ -39,5 +45,9 @@ export class HomeComponent implements OnInit {
 
     login() {
         this.modalRef = this.loginModalService.open();
+    }
+
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 }
