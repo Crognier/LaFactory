@@ -9,7 +9,7 @@
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
                 <span id="home-logged-message" *ngIf="account">
-                	Bienvenue {{account.firstName}} !<br>
+                	Bienvenue {{account.firstName}} {{account.lastName}} !<br>
                    Vous êtes enregistré en tant que "{{account.login}}". </span>
             </div>
 
