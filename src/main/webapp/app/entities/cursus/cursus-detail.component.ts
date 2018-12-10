@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import * as jsPDF from 'jspdf';
 
 import { ICursus } from 'app/shared/model/cursus.model';
 import { Module } from 'app/shared/model/module.model';
@@ -23,6 +24,24 @@ export class CursusDetailComponent implements OnInit {
             this.listDate.push(date.add(1, 'd').format('YYYY-MM-DD'));
         }
     };
+    @ViewChild('content')
+    content: ElementRef;
+    public downloadPDF() {
+        let doc = new jsPDF();
+        let specialElementHandlers = {
+            '#editor': function(element, renderer) {
+                return true;
+            }
+        };
+        let content = this.content.nativeElement;
+
+        doc.fromHTML(content.innerHTML, 15, 15, {
+            width: 190,
+            elementHandlers: specialElementHandlers
+        });
+
+        doc.save('calendrier-lafactory.pdf');
+    }
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ cursus }) => {
